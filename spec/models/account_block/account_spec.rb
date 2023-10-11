@@ -38,8 +38,8 @@ RSpec.describe AccountBlock::Account, type: :model do
     expect(subject).to_not be_valid
   end
 
-  it "is not valid on undifined role" do
-    expect(AccountBlock::Account.roles.include?(subject.role))
+  it "is valid on difined role" do
+    expect(AccountBlock::Account.roles.include?(subject.role)).to eq(true)
   end
 
   it "is not valid without a gender" do

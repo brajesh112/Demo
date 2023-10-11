@@ -5,7 +5,7 @@ module AccountBlock
 
 		def index
 			@accounts = Account.all
-			render json: @accounts, status: :ok
+			render json: AccountBlock::AccountSerializer.new(@accounts, meta: {message: "Index Action"}).serializable_hash, status: :ok if @accounts
 		end
 
 		def show
@@ -13,17 +13,14 @@ module AccountBlock
 		end
 
 		def create
-			debugger
 			if params[:type].eql?("email")
 				@account = EmailAccount.new(account_params)
 			else
 				@account = SmsAccount.new(account_params)
 			end
-			# @account = Account.new(account_params)
 			if @account.save
-				render json: @account, status: :created
+				render json: AccountBlock::AccountSerializer.new(@account, meta: {message: "Account created Successfully"}).serializable_hash, status: :created
 			else
-				debugger
 				render json: {errors: @account.errors.full_messages }, status: :unprocessable_entity
 			end
 		end
@@ -38,7 +35,7 @@ module AccountBlock
 
 		def destroy
 			@current_account.destroy
-			render json: @current_account
+			render json: AccountBlock::AccountSerializer.new(@current_account,meta: {message: "Account Deleted Successfully"}).serializable_hash,status: :ok if @current_account
 		end
 
 		private 
