@@ -4,14 +4,18 @@ RSpec.describe "AccountBlock::AccountsControllers", type: :request do
 
 	let(:url) do 
 		"/account_block/accounts"
-	end
+	end 
+
+  let(:image) do
+    fixture_file_upload(Rails.root.join('spec/photos/profile.png'), 'image/png')
+  end
 
 	let(:parameters) do 
-		{first_name: "Jack", last_name: "Smith",email: "jsmith#{rand(0..111)}@sample.com", user_name: "jack_smith#{rand(0..111)}", password: "password", role: "staff", type: "email", gender: "male"} 
+		{first_name: "Jack", last_name: "Smith",email: "jsmith#{rand(0..111)}@sample.com", user_name: "jack_smith#{rand(0..111)}", password: "password", role: "staff", type: "email", gender: "male", profile_image: image } 
 	end
 
 	let(:parameter) do 
-		{first_name: "Jack", last_name: "Smith",email: "jsmith#{rand(0..111)}@sample.com", user_name: "jack_smith#{rand(0..111)}", password: "password", role: "staff", type: "sms", gender: "male"} 
+		{first_name: "Jack", last_name: "Smith",email: "jsmith#{rand(0..111)}@sample.com", user_name: "jack_smith#{rand(0..111)}", password: "password", role: "staff", type: "sms", gender: "male", profile_image: image} 
 	end
 
 	before do

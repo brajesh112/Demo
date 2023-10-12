@@ -16,6 +16,7 @@ module Demo
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
+    # config.factory_bot.definition_file_paths = ["factories"]
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
   end

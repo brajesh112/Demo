@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe AccountBlock::Account, type: :model do
   # pending "add some examples to (or delete) #{__FILE__}"
-  subject { AccountBlock::Account.new(first_name: "Jack", last_name: "Smith",email: "jsmith@sample.com", user_name: "jack_smith", password: "password", role: "staff", type: "AccountBlock::EmailAccount", gender: "male" )}
+  subject { AccountBlock::Account.create(first_name: "Jack", last_name: "Smith",email: "jsmith@sample.com", user_name: "jack_smith", password: "password", role: "staff", type: "AccountBlock::EmailAccount", gender: "male" )}
 
   it "is valid with valid attributes" do
     expect(subject).to be_valid
@@ -52,4 +52,15 @@ RSpec.describe AccountBlock::Account, type: :model do
     expect(subject).to_not be_valid
   end
 
+  it "is not valid on duplicate email" do
+  	AccountBlock::Account.create(first_name: "Jack", last_name: "Smith",email: "jsmith@sample.com", user_name: "jack_smith_1", password: "password", role: "staff", type: "AccountBlock::EmailAccount", gender: "male" )
+  	expect(subject).to_not be_valid
+  	expect(subject.errors.messages[:email]).to eq(["has already been taken"])
+  end
+
+  it "is not valid on duplicate user_name" do
+  	AccountBlock::Account.create(first_name: "Jack", last_name: "Smith",email: "jsmith1@sample.com", user_name: "jack_smith", password: "password", role: "staff", type: "AccountBlock::EmailAccount", gender: "male" )
+  	expect(subject).to_not be_valid
+  	expect(subject.errors.messages[:user_name]).to eq(["has already been taken"])
+  end
 end
