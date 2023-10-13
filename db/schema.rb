@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_12_052029) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_13_070746) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -25,6 +25,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_12_052029) do
     t.datetime "updated_at", null: false
     t.integer "role"
     t.string "type"
+    t.bigint "phone_number"
   end
 
   create_table "active_admin_comments", force: :cascade do |t|
@@ -79,6 +80,63 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_12_052029) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
+  end
+
+  create_table "coaches", force: :cascade do |t|
+    t.string "name"
+    t.datetime "practicing_from"
+    t.text "professional_statement"
+    t.bigint "account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_coaches_on_account_id"
+  end
+
+  create_table "departments", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "doctors", force: :cascade do |t|
+    t.string "name"
+    t.datetime "practicing_from"
+    t.text "professional_statement"
+    t.bigint "account_id"
+    t.bigint "department_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_doctors_on_account_id"
+    t.index ["department_id"], name: "index_doctors_on_department_id"
+  end
+
+  create_table "doctors_specializations", force: :cascade do |t|
+    t.bigint "doctor_id"
+    t.bigint "specialization_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["doctor_id"], name: "index_doctors_specializations_on_doctor_id"
+    t.index ["specialization_id"], name: "index_doctors_specializations_on_specialization_id"
+  end
+
+  create_table "patients", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email"
+    t.bigint "phone_number"
+    t.integer "age"
+    t.text "address"
+    t.string "gender"
+    t.bigint "account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_patients_on_account_id"
+  end
+
+  create_table "specializations", force: :cascade do |t|
+    t.string "specialization_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

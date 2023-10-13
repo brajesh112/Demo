@@ -8,6 +8,7 @@ class CreateBxBlockPatientPatients < ActiveRecord::Migration[7.0]
     	t.integer :age
     	t.text :address
     	t.string :gender 
+    	t.references :account
       t.timestamps
     end
   end

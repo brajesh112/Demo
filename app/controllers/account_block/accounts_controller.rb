@@ -13,16 +13,21 @@ module AccountBlock
 		end
 
 		def create
-			if params[:type].eql?("email")
+			case params[:type]
+			when "email"
 				@account = EmailAccount.new(account_params)
-			else
+			when "sms"
 				@account = SmsAccount.new(account_params)
+			else
+				@account = EmailAccount.new(account_params)
 			end
 			if @account.save
 				render json: AccountBlock::AccountSerializer.new(@account, meta: {message: "Account created Successfully"}).serializable_hash, status: :created
+				# return redirect_to authentication_block_login_path
 			else
 				render json: {errors: @account.errors.full_messages }, status: :unprocessable_entity
 			end
+			# return redirect_to authentication_block_login_path
 		end
 
 		def update
@@ -40,7 +45,7 @@ module AccountBlock
 
 		private 
 			def account_params
-				params.permit(:user_name, :first_name, :last_name, :email, :password, :gender, :role, :profile_image)
+				params.permit(:user_name, :first_name, :last_name, :email, :password, :gender, :role, :phone_number, :profile_image)
 			end
 	end
 end

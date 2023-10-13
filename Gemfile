@@ -39,8 +39,9 @@ gem 'jwt'
 gem 'cloudinary'
 gem 'simplecov', require: false, group: :test
 gem 'faker'
-gem "activeadmin"
+gem 'activeadmin', '~> 2.14'
 gem "devise"
+gem 'arctic_admin'
 # gem 'active_model_serializers'
 gem 'fast_jsonapi'
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
