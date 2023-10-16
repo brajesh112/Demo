@@ -8,11 +8,15 @@ module BxBlockDoctor
 		end
 
 		def create
-			@doctor = @current_account.build_doctor(doctor_params)
-			if @doctor.save
-				render json: BxBlockDoctor::DoctorSerializer.new(@doctor, meta: {message: 'Profile Created'}).serializable_hash, status: :created 
+			if @current_account.role.eql?("doctor")
+				@doctor = @current_account.build_doctor(doctor_params)
+				if @doctor.save
+					render json: BxBlockDoctor::DoctorSerializer.new(@doctor, meta: {message: 'Profile Created'}).serializable_hash, status: :created 
+				else
+					render json:  {errors: @doctor.errors.full_messages }, status: :unprocessable_entity
+				end
 			else
-				render json:  {errors: @doctor.errors.full_messages }, status: :unprocessable_entity
+				render plain: "Please Select Correct Role"
 			end
 		end
 

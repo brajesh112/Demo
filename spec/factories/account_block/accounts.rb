@@ -1,4 +1,3 @@
-require 'faker'
 FactoryBot.define do
 	factory "AccountBlock::Account" do
 		first_name {Faker::Name.first_name} 
@@ -7,7 +6,7 @@ FactoryBot.define do
 		user_name {Faker::Internet.unique.user_name}
 		password {"123456"}
 		type {"AccountBlock::EmailAccount"}
-		role {"doctor"}
+		role {rand(0...3)}
 		phone_number {"7896541236"}
 		gender {Faker::Gender.binary_type}
 		

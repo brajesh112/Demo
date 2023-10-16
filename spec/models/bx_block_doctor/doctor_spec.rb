@@ -5,12 +5,13 @@ RSpec.describe BxBlockDoctor::Doctor, type: :model do
 		@account = create("AccountBlock::Account")
 		@account.id
 	end 
+
 	let(:department) do
 		@department = create("bx_block_department_department")
 		@department.id
 	end
 	
-	subject {BxBlockDoctor::Doctor.create(name: "jack",practicing_from: "2008-02-20T00:00:00.000Z",professional_statement: "Graduated from AIMS Bhopal", department_id: department, account_id: account)}
+	subject {BxBlockDoctor::Doctor.create(name: "jack",practicing_from: "2008-02-20T00:00:00.000Z",professional_statement: "Graduated from AIIMS Bhopal", department_id: department, account_id: account)}
 
 	it "should be valid with valid attributes" do
 		expect(subject).to be_valid

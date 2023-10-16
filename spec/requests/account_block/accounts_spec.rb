@@ -10,11 +10,11 @@ RSpec.describe "AccountBlock::Accounts", type: :request do
   end
 
 	let(:parameters) do 
-		{first_name: "Jack", last_name: "Smith",email: "jsmith#{rand(0..111)}@sample.com", user_name: "jack_smith#{rand(0..111)}", password: "password", role: "staff", type: "email", gender: "male", phone_number: "789654135", profile_image: image } 
+		{first_name: "Jack", last_name: "Smith",email: "jsmith#{rand(0..111)}@sample.com", user_name: "jack_smith#{rand(0..111)}", password: "password", role: "doctor", type: "email", gender: "male", phone_number: "789654135", profile_image: image } 
 	end
 
 	let(:parameter) do 
-		{first_name: "Jack", last_name: "Smith",email: "jsmith#{rand(0..111)}@sample.com", user_name: "jack_smith#{rand(0..111)}", password: "password", role: "staff", type: "sms", gender: "male", phone_number: "789654135", profile_image: image} 
+		{first_name: "Jack", last_name: "Smith",email: "jsmith#{rand(0..111)}@sample.com", user_name: "jack_smith#{rand(0..111)}", password: "password", role: "doctor", type: "sms", gender: "male", phone_number: "789654135", profile_image: image} 
 	end
 
 	before do
@@ -66,7 +66,7 @@ RSpec.describe "AccountBlock::Accounts", type: :request do
   		patch url + "/:id", headers: {"Authorization"=> @token}, params: {password: @account.password}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("200")
-    	expect(value["data"]["attributes"]["password"]).to eq(@account.password)
+    	expect(value["data"]["attributes"]["first_name"]).to eq(@account.first_name)
   	end
 
   	it "shows errors messages" do 

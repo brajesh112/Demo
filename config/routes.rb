@@ -9,7 +9,7 @@ Rails.application.routes.draw do
  		resources :doctors
  	end
 
- 	namespace :bx_block_coache do
+ 	namespace :bx_block_coach do
  		resources :coaches
  	end
 

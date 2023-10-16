@@ -34,6 +34,7 @@ RSpec.describe "BxBlockDoctor::Doctors", type: :request do
 
   describe "POST /create" do
   	it "should create current account's doctors profile" do
+  		@doctor.account.update(role: 'doctor')
   		post url, params: parameter, headers: {"Authorization" =>@token}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("201")
@@ -41,20 +42,33 @@ RSpec.describe "BxBlockDoctor::Doctors", type: :request do
   	end
 
   	it "should Show Errors" do
+  		@doctor.account.update(role: 'doctor')
   		post url, headers: {"Authorization" => @token}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("422")
   		expect(value["errors"].first).to eq("Department must exist")
   	end
+
+  	it "should return plain text" do 
+  		@doctor.account.update(role: 'coach')
+  		post url, params: parameter, headers: {"Authorization" =>@token}
+  		expect(response.body).to eql("Please Select Correct Role")
+  	end
   end
 
   describe "PATCH /update" do
   	it "should update current doctors profile" do
-  		patch url+"/:id"
+  		patch url+"/:id",  headers: {"Authorization" => @token}
   		value = JSON.parse(response.body)
-  		debugger
   		expect(response.code).to eq("200")
   		expect(value["data"]["attributes"]["name"]).to eq(@doctor[:name])
+  	end
+
+  	it "should not update and show some errors" do 
+  		patch url+"/:id", headers: {"Authorization" => @token}, params: {name: nil}
+  		value = JSON.parse(response.body)
+  		expect(response.code).to eq("422")
+  		expect(value["errors"].first).to eq("Name can't be blank")
   	end
   end
 end
