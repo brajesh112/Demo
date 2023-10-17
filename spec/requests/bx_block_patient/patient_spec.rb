@@ -83,4 +83,21 @@ RSpec.describe "BxBlockPatient::Patients", type: :request do
   		expect(value["errors"].first).to eq("First name can't be blank")
   	end
   end
+
+
+  describe "DELETE /destroy" do
+    it "should destroy profile of current patient using headers" do
+      delete url + "/:id", headers: {"Authorization" => @token}
+      value = JSON.parse(response.body)
+      expect(response.code).to eq("200")
+      expect(value["data"]["attributes"]["first_name"]).to eq(@patient.first_name)
+    end
+
+    it "should destroy profile of current patient using patient id" do
+      delete url + "/#{@patient.id}"
+      value = JSON.parse(response.body)
+      expect(response.code).to eq("200")
+      expect(value["data"]["attributes"]["first_name"]).to eq(@patient.first_name)
+    end
+  end
 end

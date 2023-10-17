@@ -32,6 +32,7 @@ module BxBlockPatient
 		def destroy
 			@patient = @current_account.present? ? @current_account.patient : Patient.find_by(id: params[:id])
 			@patient.destroy
+			render json: BxBlockPatient::PatientSerializer.new(@patient, meta: {message: "Profile deleted"}).serializable_hash, status: :ok
 		end
 
 
