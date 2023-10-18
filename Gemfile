@@ -42,6 +42,7 @@ gem 'faker'
 gem 'activeadmin', '~> 2.14'
 gem "devise"
 gem 'arctic_admin'
+gem "active_admin_import"
 # gem 'active_model_serializers'
 gem 'fast_jsonapi'
 gem 'rails-controller-testing'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_13_070746) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_18_131702) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -82,6 +82,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_070746) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
+  create_table "appointments", force: :cascade do |t|
+    t.bigint "patient_id"
+    t.string "healthcareable_type"
+    t.bigint "healthcareable_id"
+    t.datetime "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "slot_id"
+    t.index ["healthcareable_type", "healthcareable_id"], name: "index_appointments_on_healthcareable"
+    t.index ["patient_id"], name: "index_appointments_on_patient_id"
+    t.index ["slot_id"], name: "index_appointments_on_slot_id"
+  end
+
   create_table "coaches", force: :cascade do |t|
     t.string "name"
     t.datetime "practicing_from"
@@ -90,6 +103,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_070746) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_coaches_on_account_id"
+  end
+
+  create_table "coaches_specializations", force: :cascade do |t|
+    t.bigint "coach_id"
+    t.bigint "specialization_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coach_id"], name: "index_coaches_specializations_on_coach_id"
+    t.index ["specialization_id"], name: "index_coaches_specializations_on_specialization_id"
   end
 
   create_table "departments", force: :cascade do |t|
@@ -106,6 +128,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_070746) do
     t.bigint "department_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "start_time"
+    t.string "end_time"
     t.index ["account_id"], name: "index_doctors_on_account_id"
     t.index ["department_id"], name: "index_doctors_on_department_id"
   end
@@ -117,6 +141,44 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_070746) do
     t.datetime "updated_at", null: false
     t.index ["doctor_id"], name: "index_doctors_specializations_on_doctor_id"
     t.index ["specialization_id"], name: "index_doctors_specializations_on_specialization_id"
+  end
+
+  create_table "medicines", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "patient_tests", force: :cascade do |t|
+    t.bigint "patient_id"
+    t.string "test_name"
+    t.string "organization"
+    t.datetime "date"
+    t.decimal "fee"
+    t.text "description"
+    t.string "doctor_name"
+    t.string "lab_assistent"
+    t.integer "status"
+    t.bigint "report_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["patient_id"], name: "index_patient_tests_on_patient_id"
+    t.index ["report_id"], name: "index_patient_tests_on_report_id"
+  end
+
+  create_table "patient_triages", force: :cascade do |t|
+    t.bigint "patient_id"
+    t.string "blood_pressure"
+    t.string "sugar_level"
+    t.string "blood_group"
+    t.string "heart_beat"
+    t.string "height"
+    t.string "weight"
+    t.decimal "fee"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["patient_id"], name: "index_patient_triages_on_patient_id"
   end
 
   create_table "patients", force: :cascade do |t|
@@ -131,6 +193,30 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_13_070746) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_patients_on_account_id"
+  end
+
+  create_table "prescriptions", force: :cascade do |t|
+    t.string "duration"
+    t.integer "quantity"
+    t.bigint "medicine_id"
+    t.bigint "patient_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["medicine_id"], name: "index_prescriptions_on_medicine_id"
+    t.index ["patient_id"], name: "index_prescriptions_on_patient_id"
+  end
+
+  create_table "reports", force: :cascade do |t|
+    t.bigint "patient_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["patient_id"], name: "index_reports_on_patient_id"
+  end
+
+  create_table "slots", force: :cascade do |t|
+    t.string "slot_time"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "specializations", force: :cascade do |t|

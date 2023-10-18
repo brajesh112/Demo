@@ -34,7 +34,7 @@ module BxBlockDoctor
 
 		private
 		 def doctor_params
-		 		params.permit(:name, :practicing_from, :professional_statement, :department_id)
+		 		params.permit(:name, :practicing_from, :professional_statement, :department_id, :start_time, :end_time)
 		 end
 	end
 end

@@ -5,6 +5,13 @@ module BxBlockDoctor
 		belongs_to :department, class_name: "BxBlockDepartment::Department"
 		has_and_belongs_to_many :specializations, class_name: "BxBlockSpecialization::Specialization"
 		validates :name, :practicing_from, :professional_statement, presence: true
+		has_many :appointments, as: :healthcareable
+		validate :timecheck
 
+		def timecheck
+		 if self.start_time.to_time > self.end_time.to_time
+		 	 errors.add(:start_time, "can't be greater than end time")
+		 	end
+		end
 	end
 end
