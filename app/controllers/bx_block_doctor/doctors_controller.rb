@@ -16,7 +16,7 @@ module BxBlockDoctor
 					render json:  {errors: @doctor.errors.full_messages }, status: :unprocessable_entity
 				end
 			else
-				render plain: "Please Select Correct Role"
+				render json: {error: "Please Select Correct Role"}
 			end
 		end
 

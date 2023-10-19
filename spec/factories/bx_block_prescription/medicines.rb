@@ -1,5 +1,6 @@
 FactoryBot.define do
-  factory :bx_block_prescription_medicine, class: 'BxBlockPrescription::Medicine' do
-    
+  factory :medicine, class: 'BxBlockPrescription::Medicine' do
+    name {Faker::Name.name}
+    description {Faker::String.random}
   end
 end

@@ -9,7 +9,7 @@ RSpec.describe "AuthenicationBlock::Authentications", type: :request do
 	end
 
 	before do
-		@account = create("AccountBlock::Account")
+		@account = create(:account)
 	end
 
   describe "POST /login" do

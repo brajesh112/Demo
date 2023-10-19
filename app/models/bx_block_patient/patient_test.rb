@@ -1,5 +1,5 @@
 module BxBlockPatient
-	class Patient < ApplicationRecord
+	class PatientTest < ApplicationRecord
 		self.table_name = "patient_tests"
 		belongs_to :patient, class_name: "BxBlockPatient::Patient"
 		enum :status, [:positive, :negative]

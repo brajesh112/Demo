@@ -1,8 +1,9 @@
 module BxBlockAppointment
 	class Appointment < ApplicationRecord
 		self.table_name = "appointments"
-		belongs_to :patient, class_name: "BxBlockPatient::Patient"
-		belongs_to :healthcareable, polymorphic: true
+		belongs_to :patient, class_name: "AccountBlock::Account"
+		belongs_to :account, class_name: "AccountBlock::Account"
 		belongs_to :slot, class_name: "BxBlockAppointment::Slot"
+		validates :date, presence: true
 	end
 end

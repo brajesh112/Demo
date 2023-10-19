@@ -18,7 +18,7 @@ RSpec.describe "AccountBlock::Accounts", type: :request do
 	end
 
 	before do
-	 	@account = create("AccountBlock::Account")
+	 	@account = create(:account)
 	 	 @token = jwt_encode({id: @account.id})
   end
 

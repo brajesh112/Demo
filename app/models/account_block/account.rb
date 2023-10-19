@@ -9,5 +9,7 @@ module AccountBlock
 		has_one :patient, dependent: :destroy, class_name: "BxBlockPatient::Patient"
 		has_one :doctor, dependent: :destroy,class_name: "BxBlockDoctor::Doctor"
 		has_one :coach, dependent: :destroy,class_name: "BxBlockCoach::Coach"
+		has_many :appointments, class_name: "BxBlockAppointment::Appointment"
+		has_many :other_appointments, class_name: "BxBlockAppointment::Appointment", foreign_key: "patient_id"
 	end
 end

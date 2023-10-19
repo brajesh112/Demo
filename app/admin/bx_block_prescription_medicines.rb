@@ -14,11 +14,4 @@ ActiveAdmin.register BxBlockPrescription::Medicine, as: "Medicine" do
   #   permitted << :other if params[:action] == 'create' && current_user.admin?
   #   permitted
   # end
-   form do |f|
-    f.inputs do
-      f.input :name
-      f.input :description
-    end
-    f.actions
-  end
 end

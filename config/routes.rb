@@ -25,6 +25,10 @@ Rails.application.routes.draw do
  		resources :specializations
  	end
 
+ 	namespace :bx_block_appointment do
+ 		resources :appointments 
+ 	end
+
 
  	namespace :authentication_block do
  		post "/login", to: "authentications#login"

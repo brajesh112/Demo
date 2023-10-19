@@ -23,11 +23,11 @@ module AccountBlock
 			end
 			if @account.save
 				render json: AccountBlock::AccountSerializer.new(@account, meta: {message: "Account created Successfully"}).serializable_hash, status: :created
-				# return redirect_to authentication_block_login_path
+				
 			else
 				render json: {errors: @account.errors.full_messages }, status: :unprocessable_entity
 			end
-			# return redirect_to authentication_block_login_path
+			
 		end
 
 		def update

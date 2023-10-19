@@ -9,7 +9,7 @@ module BxBlockCoach
 
 		def show
 			@coach = @current_account.coach
-			render json: BxBlockCoach::CoachSerializer.new(@coach, meta: {message: "Show Action"}).serializable_hash, status: :ok if @coach
+			render json: BxBlockCoach::CoachSerializer.new(@coach, meta: {message: "Show Action"}).serializable_hash, status: :ok 
 		end
 
 		def create
@@ -21,7 +21,7 @@ module BxBlockCoach
 					render json:  {errors: @coach.errors.full_messages }, status: :unprocessable_entity
 				end
 			else
-				render plain: "Please Select Correct Role"
+				render json: {error: "Please Select Correct Role"}
 			end
 		end
 
@@ -36,7 +36,7 @@ module BxBlockCoach
 		private
 		
 			def coach_params
-				params.permit(:name, :practicing_from, :professional_statement)
+				params.permit(:name, :practicing_from, :professional_statement,:start_time, :end_time)
 			end
 	end
 end

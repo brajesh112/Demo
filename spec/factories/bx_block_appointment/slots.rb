@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :bx_block_appointment_slot, class: 'BxBlockAppointment::Slot' do
-    
+  factory :slot, class: 'BxBlockAppointment::Slot' do
+    slot_time {"10:00"}
   end
 end
