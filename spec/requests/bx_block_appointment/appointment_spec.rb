@@ -3,24 +3,27 @@ include JwtToken
 RSpec.describe "BxBlockAppointment::Appointments", type: :request do
 
 	let(:url){ "/bx_block_appointment/appointments" }
-	let!(:appointment) { create(:appointment)}
-	let(:appointment1) {create(:appointment, :coach)}
-	let(:token){ jwt_encode({id: appointment.patient.account.id})} 
-	# let(:token1){jwt_encode({id: appointment.healthcareable.account.id})}
-	# let(:token2){jwt_encode({id: appointment1.healthcareable.account.id})}
+	let(:doctor) {create(:doctor)}
+	let(:patient) {create(:patient_account)}
+	let!(:appointment) { create(:appointment, account: doctor.account, healthcareable_type: doctor.account.role, patient: patient)}
+	let(:token){ jwt_encode({id: patient.id})} 
 
 	let(:slot) {create(:slot)}
 
 	let(:parameter) do
-		{doctor: appointment.healthcareable.id, slot: slot.id, date: "10/12/2023"}
-	end
-
-	let(:parameter1) do
-		{coach: appointment1.healthcareable.id, slot: slot.id, date: "10/12/2023"}
+		{account_id: doctor.account.id, slot: slot.id, date: "10/12/2023"}
 	end
 
 	let(:unautarized) do
-		{coach: appointment1.healthcareable_id}
+		{account_id: doctor.account.id}
+	end
+
+	describe "GET /index" do
+		it "should show appointments list for current user" do
+			get url , headers: {"Authorization" => token}
+			value = JSON.parse(response.body)
+			expect(value["data"].first["attributes"]["account_id"]).to eq(doctor.account.id)
+		end
 	end
 
   describe "GET /show" do
@@ -28,20 +31,8 @@ RSpec.describe "BxBlockAppointment::Appointments", type: :request do
     it "should show appointment details" do
     	get url+"/#{appointment.id}", headers: {"Authorization" => token }
     	value = JSON.parse(response.body)
-   		expect(value["data"]["attributes"]["healthcareable_id"]).to eq(appointment.healthcareable_id)
+   		expect(value["data"]["attributes"]["account_id"]).to eq(doctor.account.id)
     end
-
-    # it "should show appointment details for doctor" do
-    # 	get url+"/#{appointment.id}", headers: {"Authorization" => token1}
-    # 	value = JSON.parse(response.body)
-    # 	expect(value["data"]["attributes"]["healthcareable_id"]).to eq(appointment.healthcareable_id)
-    # end
-
-    # it "should show appointment details for coach" do
-    # 	get url+"/#{appointment1.id}", headers: {"Authorization" => token2}
-    # 	value = JSON.parse(response.body)
-    # 	expect(value["data"]["attributes"]["healthcareable_id"]).to eq(appointment1.healthcareable_id)
-    # end
   end
 
 
@@ -49,13 +40,7 @@ RSpec.describe "BxBlockAppointment::Appointments", type: :request do
   	it "should create appointment with doctor" do
   		post url, headers: {"Authorization" => token}, params: parameter
   		value = JSON.parse(response.body)
-  		expect(value["data"]["attributes"]["healthcareable_type"]).to eq("BxBlockDoctor")
-  	end
-
-  	it "should create appointment with coach" do
-  		post url, headers: {"Authorization" => token}, params: parameter1
-  		value = JSON.parse(response.body)
-  		expect(value["data"]["attributes"]["healthcareable_type"]).to eq("BxBlockCoach::Coach")
+  		expect(value["data"]["attributes"]["account_id"]).to eq(doctor.account.id)
   	end
 
   	it "should show error message" do
@@ -67,7 +52,7 @@ RSpec.describe "BxBlockAppointment::Appointments", type: :request do
   	it "should suggest to select correct healthcare" do
   		post url, headers: {"Authorization" => token}
   		value = JSON.parse(response.body)
-  		expect(value["error"]).to eq("Select correct healthcare")
+  		expect(value["error"]).to eq("Slot already present")
   	end
   end
 
@@ -85,9 +70,48 @@ RSpec.describe "BxBlockAppointment::Appointments", type: :request do
   	end
 
   	it "should suggest to select correct healthcare" do
-  		post url, headers: {"Authorization" => token}
+  		patch url+"/#{appointment.id + 1}", headers: {"Authorization" => token}
   		value = JSON.parse(response.body)
-  		expect(value["error"]).to eq("Select correct healthcare")
+  		expect(value["error"]).to eq("Select correct appointment")
+  	end
+  end
+
+  describe "DELETE /destroy" do
+  	it "should destroy appointment" do
+  		delete url+"/#{appointment.id}", headers: {"Authorization" => token}
+  		value = JSON.parse(response.body)
+  		expect(value["data"]["id"]).to eq("#{appointment.id}")
+  	end
+
+  	it "should show some error" do 
+  		delete url+"/#{appointment.id + 1}", headers: {"Authorization" => token}
+  		value = JSON.parse(response.body)
+  		expect(value["error"]).to eq("something went wrong")
+  	end
+  end
+
+  describe "GET /account" do
+  	it "should show list of all doctors" do
+  		get "/bx_block_appointment/accounts", headers: {"Authorization" => token}
+  		value = JSON.parse(response.body)
+  		expect(value["data"].first["attributes"]["id"]).to eq(doctor.account.id)
+  	end
+
+  	let(:specialization) {create (:specialization)}
+  	it "should show list of doctors form specific specialization" do
+  		doctor.account.specializations << specialization
+  		get "/bx_block_appointment/accounts", params: {query: "#{specialization.specialization_name}"}
+  		value = JSON.parse(response.body)
+  		expect(value["data"].first["attributes"]["id"]).to eq(doctor.account.id)
+  	end
+  end
+
+  describe "GET /available_slot" do
+  	let!(:slot1) {create(:slot, slot_time: "11:00")}
+  	it "should show available slots for specific date and doctor" do
+  		get "/bx_block_appointment/slots", params: {account_id: doctor.account.id, date: DateTime.now.to_date}
+  		value = JSON.parse(response.body)
+  		expect(value.first["id"]).to eq(slot1.id)
   	end
   end
 end

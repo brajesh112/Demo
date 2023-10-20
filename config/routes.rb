@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   namespace :account_block do
  		resources :accounts	
+ 		post "/specializations", to: "accounts#specialization"
  	end
 
  	namespace :bx_block_doctor do
@@ -26,7 +27,9 @@ Rails.application.routes.draw do
  	end
 
  	namespace :bx_block_appointment do
- 		resources :appointments 
+ 		resources :appointments
+ 		get "/accounts", to: "appointments#account" 
+ 		get "/slots", to: "appointments#available_slot"
  	end
 
 

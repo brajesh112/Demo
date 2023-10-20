@@ -11,7 +11,6 @@ RSpec.describe "BxBlockCoach::Coaches", type: :request do
 	let(:parameter) do
 		{name: "Jack", practicing_from: "02/12/2023", professional_statement: "AIIMS Graduated", account_id: coach.account_id, start_time: "10:00", end_time: "13:00"} 
 	end
-	end
 
   describe "GET /index" do
   	it "should show all coaches details" do

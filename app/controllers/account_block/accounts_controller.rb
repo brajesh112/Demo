@@ -4,8 +4,8 @@ module AccountBlock
 		skip_before_action :authenticate_request, only: [:create]
 
 		def index
-			@accounts = Account.all
-			render json: AccountBlock::AccountSerializer.new(@accounts, meta: {message: "Index Action"}).serializable_hash, status: :ok if @accounts
+			accounts = Account.all
+			render json: AccountBlock::AccountSerializer.new(accounts, meta: {message: "Index Action"}).serializable_hash, status: :ok if accounts
 		end
 
 		def show
@@ -15,17 +15,17 @@ module AccountBlock
 		def create
 			case params[:type]
 			when "email"
-				@account = EmailAccount.new(account_params)
+				account = EmailAccount.new(account_params)
 			when "sms"
-				@account = SmsAccount.new(account_params)
+				account = SmsAccount.new(account_params)
 			else
-				@account = EmailAccount.new(account_params)
+				account = EmailAccount.new(account_params)
 			end
-			if @account.save
-				render json: AccountBlock::AccountSerializer.new(@account, meta: {message: "Account created Successfully"}).serializable_hash, status: :created
+			if account.save
+				render json: AccountBlock::AccountSerializer.new(account, meta: {message: "Account created Successfully"}).serializable_hash, status: :created
 				
 			else
-				render json: {errors: @account.errors.full_messages }, status: :unprocessable_entity
+				render json: {errors: account.errors.full_messages }, status: :unprocessable_entity
 			end
 			
 		end
@@ -41,6 +41,12 @@ module AccountBlock
 		def destroy
 			@current_account.destroy
 			render json: AccountBlock::AccountSerializer.new(@current_account,meta: {message: "Account Deleted Successfully"}).serializable_hash,status: :ok if @current_account
+		end
+
+		def specialization
+			specializations = BxBlockSpecialization::Specialization.where(id: params[:ids])
+			@current_account.specializations << specializations if @current_account.role != ('patient')
+			render json: AccountBlock::AccountSerializer.new(@current_account,meta: {message: "Updated Specialization"}).serializable_hash,status: :ok 
 		end
 
 		private 

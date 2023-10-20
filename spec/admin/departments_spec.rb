@@ -14,7 +14,7 @@ RSpec.describe Admin::DepartmentsController, type: :controller do
   before do
   	@adminuser = create(:admin_user)
     sign_in @adminuser
-    @department = create(:bx_block_department_department)
+    @department = create(:department)
   end
 
   describe "GET /index" do

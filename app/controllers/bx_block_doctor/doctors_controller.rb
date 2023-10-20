@@ -3,17 +3,17 @@ module BxBlockDoctor
 		before_action :authenticate_request
 
 		def index
-			@doctors = Doctor.all
-			render json: BxBlockDoctor::DoctorSerializer.new(@doctors, meta: {message: 'index action'}).serializable_hash, status: :ok if @doctors
+			doctors = Doctor.all
+			render json: BxBlockDoctor::DoctorSerializer.new(doctors, meta: {message: 'index action'}).serializable_hash, status: :ok if doctors
 		end
 
 		def create
 			if @current_account.role.eql?("doctor")
-				@doctor = @current_account.build_doctor(doctor_params)
-				if @doctor.save
-					render json: BxBlockDoctor::DoctorSerializer.new(@doctor, meta: {message: 'Profile Created'}).serializable_hash, status: :created 
+				doctor = @current_account.build_doctor(doctor_params)
+				if doctor.save
+					render json: BxBlockDoctor::DoctorSerializer.new(doctor, meta: {message: 'Profile Created'}).serializable_hash, status: :created 
 				else
-					render json:  {errors: @doctor.errors.full_messages }, status: :unprocessable_entity
+					render json:  {errors: doctor.errors.full_messages }, status: :unprocessable_entity
 				end
 			else
 				render json: {error: "Please Select Correct Role"}

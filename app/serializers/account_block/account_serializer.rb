@@ -2,8 +2,8 @@ module AccountBlock
 	class AccountSerializer
 		include FastJsonapi::ObjectSerializer
 	  attributes :id, :user_name, :first_name, :last_name, :email,:gender, :role, :phone_number
+	  has_many :specializations
 	  attribute "relationships" do |object|
-	  # debugger
 	  	if object.role.eql?("doctor")
 	  	 object.doctor
 	  	elsif object.role.eql?("patient")

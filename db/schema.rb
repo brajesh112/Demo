@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_19_064829) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_20_133207) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,6 +26,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_19_064829) do
     t.integer "role"
     t.string "type"
     t.bigint "phone_number"
+  end
+
+  create_table "accounts_specializations", force: :cascade do |t|
+    t.bigint "account_id"
+    t.bigint "specialization_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_accounts_specializations_on_account_id"
+    t.index ["specialization_id"], name: "index_accounts_specializations_on_specialization_id"
   end
 
   create_table "active_admin_comments", force: :cascade do |t|
@@ -84,10 +93,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_19_064829) do
 
   create_table "appointments", force: :cascade do |t|
     t.bigint "patient_id"
-    t.string "healtcareable_type"
+    t.string "healthcareable_type"
     t.bigint "slot_id"
     t.bigint "account_id"
-    t.datetime "date"
+    t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_appointments_on_account_id"
@@ -105,15 +114,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_19_064829) do
     t.string "start_time"
     t.string "end_time"
     t.index ["account_id"], name: "index_coaches_on_account_id"
-  end
-
-  create_table "coaches_specializations", force: :cascade do |t|
-    t.bigint "coach_id"
-    t.bigint "specialization_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["coach_id"], name: "index_coaches_specializations_on_coach_id"
-    t.index ["specialization_id"], name: "index_coaches_specializations_on_specialization_id"
   end
 
   create_table "departments", force: :cascade do |t|
@@ -136,13 +136,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_19_064829) do
     t.index ["department_id"], name: "index_doctors_on_department_id"
   end
 
-  create_table "doctors_specializations", force: :cascade do |t|
-    t.bigint "doctor_id"
-    t.bigint "specialization_id"
+  create_table "instructions", force: :cascade do |t|
+    t.string "instruction"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["doctor_id"], name: "index_doctors_specializations_on_doctor_id"
-    t.index ["specialization_id"], name: "index_doctors_specializations_on_specialization_id"
   end
 
   create_table "medicines", force: :cascade do |t|
@@ -159,12 +156,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_19_064829) do
     t.datetime "date"
     t.decimal "fee"
     t.text "description"
-    t.string "doctor_name"
+    t.bigint "account_id"
     t.string "lab_assistent"
     t.integer "status"
     t.bigint "report_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_patient_tests_on_account_id"
     t.index ["patient_id"], name: "index_patient_tests_on_patient_id"
     t.index ["report_id"], name: "index_patient_tests_on_report_id"
   end
@@ -204,6 +202,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_19_064829) do
     t.bigint "patient_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "account_id"
+    t.bigint "instruction_id"
+    t.index ["account_id"], name: "index_prescriptions_on_account_id"
+    t.index ["instruction_id"], name: "index_prescriptions_on_instruction_id"
     t.index ["medicine_id"], name: "index_prescriptions_on_medicine_id"
     t.index ["patient_id"], name: "index_prescriptions_on_patient_id"
   end
@@ -231,4 +233,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_19_064829) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "appointments", "accounts"
   add_foreign_key "appointments", "accounts", column: "patient_id"
+  add_foreign_key "patient_tests", "accounts", column: "patient_id"
+  add_foreign_key "patient_triages", "accounts", column: "patient_id"
+  add_foreign_key "prescriptions", "accounts", column: "patient_id"
+  add_foreign_key "reports", "accounts", column: "patient_id"
 end

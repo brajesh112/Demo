@@ -14,7 +14,7 @@ RSpec.describe Admin::SpecializationsController, type: :controller do
   before do
   	@adminuser = create(:admin_user)
     sign_in @adminuser
-    @specialization = create(:bx_block_specialization_specialization)
+    @specialization = create(:specialization)
   end
 
   describe "GET /index" do

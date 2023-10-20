@@ -9,7 +9,6 @@ FactoryBot.define do
 		role {rand(0...3)}
 		phone_number {"7896541236"}
 		gender {Faker::Gender.binary_type}
-		
 		profile_image { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'photos', 'profile.png'), 'image/png') }
 		# image = File.open(Faker::LoremFlickr.image)
 	      

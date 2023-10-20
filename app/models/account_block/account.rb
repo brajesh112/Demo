@@ -11,5 +11,11 @@ module AccountBlock
 		has_one :coach, dependent: :destroy,class_name: "BxBlockCoach::Coach"
 		has_many :appointments, class_name: "BxBlockAppointment::Appointment"
 		has_many :other_appointments, class_name: "BxBlockAppointment::Appointment", foreign_key: "patient_id"
+		has_many :patient_tests, class_name: "BxBlockPatient::PatientTest"
+		has_many :other_patient_tests, class_name: "BxBlockPatient::PatientTest", foreign_key: "patient_id"
+		has_many :patient_triages, class_name: "BxBlockPatient::PatientTriage", foreign_key: "patient_id"
+		has_and_belongs_to_many :specializations, class_name: "BxBlockSpecialization::Specialization"
+		has_many :prescriptions, class_name: "BxBlockPrescription::Priscription"
+		has_many :other_prescriptions, class_name: "BxBlockPrescription::Priscription", foreign_key: "patient_id"
 	end
 end

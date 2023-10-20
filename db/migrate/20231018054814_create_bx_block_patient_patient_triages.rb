@@ -1,7 +1,7 @@
 class CreateBxBlockPatientPatientTriages < ActiveRecord::Migration[7.0]
   def change
     create_table :patient_triages do |t|
-    	t.references :patient
+    	t.references :patient, foreign_key: {to_table: 'accounts'}
     	t.string :blood_pressure
     	t.string :sugar_level
     	t.string :blood_group
