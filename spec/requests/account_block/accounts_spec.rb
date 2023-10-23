@@ -1,24 +1,16 @@
 require 'rails_helper'
 include JwtToken
 RSpec.describe "AccountBlock::Accounts", type: :request do
-  	let(:url) do 
-		"/account_block/accounts"
-	end 
+  let(:url) { "/account_block/accounts" }
+  let(:image) { fixture_file_upload(Rails.root.join('spec/photos/profile.png'), 'image/png') }
 
-  let(:image) do
-    fixture_file_upload(Rails.root.join('spec/photos/profile.png'), 'image/png')
-  end
+	let(:parameters){ { first_name: "Jack", last_name: "Smith",email: "jsmith#{rand(0..111)}@sample.com", user_name: "jack_smith#{rand(0..111)}", password: "password", role: "doctor", type: "email", gender: "male", phone_number: "789654135", profile_image: image } }
 
-	let(:parameters) do 
-		{first_name: "Jack", last_name: "Smith",email: "jsmith#{rand(0..111)}@sample.com", user_name: "jack_smith#{rand(0..111)}", password: "password", role: "doctor", type: "email", gender: "male", phone_number: "789654135", profile_image: image } 
-	end
+	let(:parameter){
+		{ first_name: "Jack", last_name: "Smith",email: "jsmith#{ rand(0..111) }@sample.com", user_name: "jack_smith#{ rand(0..111) }", password: "password", role: "coach", type: "sms", gender: "male", phone_number: "789654135", profile_image: image } }
 
-	let(:parameter) do 
-		{first_name: "Jack", last_name: "Smith",email: "jsmith#{rand(0..111)}@sample.com", user_name: "jack_smith#{rand(0..111)}", password: "password", role: "coach", type: "sms", gender: "male", phone_number: "789654135", profile_image: image} 
-	end
-
-	 	let!(:account) {create(:account)}
-	 	let(:token) {jwt_encode({id: account.id})}
+	 	let!(:account) { create(:account, role: "patient") }
+	 	let(:token) { jwt_encode({id: account.id}) }
 
   describe "GET /index" do
     it "show all accounts" do

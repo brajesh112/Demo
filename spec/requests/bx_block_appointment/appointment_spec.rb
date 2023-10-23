@@ -3,24 +3,20 @@ include JwtToken
 RSpec.describe "BxBlockAppointment::Appointments", type: :request do
 
 	let(:url){ "/bx_block_appointment/appointments" }
-	let(:doctor) {create(:doctor)}
-	let(:patient) {create(:patient_account)}
-	let!(:appointment) { create(:appointment, account: doctor.account, healthcareable_type: doctor.account.role, patient: patient)}
-	let(:token){ jwt_encode({id: patient.id})} 
+	let(:doctor) { create(:doctor) }
+	let(:patient) { create(:patient_account) }
+	let!(:appointment) { create(:appointment, account: doctor.account, healthcareable_type: doctor.account.role, patient: patient) }
+	let(:token){ jwt_encode({id: patient.id}) } 
 
-	let(:slot) {create(:slot)}
+	let(:slot) { create(:slot) }
 
-	let(:parameter) do
-		{account_id: doctor.account.id, slot: slot.id, date: "10/12/2023"}
-	end
+	let(:parameter){ { account_id: doctor.account.id, slot: slot.id, date: "10/12/2023" } }
 
-	let(:unautarized) do
-		{account_id: doctor.account.id}
-	end
+	let(:unautarized) { { account_id: doctor.account.id } }
 
 	describe "GET /index" do
 		it "should show appointments list for current user" do
-			get url , headers: {"Authorization" => token}
+			get url , headers: { "Authorization" => token }
 			value = JSON.parse(response.body)
 			expect(value["data"].first["attributes"]["account_id"]).to eq(doctor.account.id)
 		end

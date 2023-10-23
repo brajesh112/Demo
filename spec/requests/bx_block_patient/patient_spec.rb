@@ -2,15 +2,12 @@ require 'rails_helper'
 include JwtToken
 RSpec.describe "BxBlockPatient::Patients", type: :request do
 
-	let(:url) do
-		"/bx_block_patient/patients"
-	end
+	let(:url) { "/bx_block_patient/patients" }
 
-	let(:parameter) do
-		{first_name: "abc", last_name: "xyz", age: rand(0..100), phone_number: 789654126, gender: "male", address: "abc compartment", email: "abc@email.com"}
-	end
-	let!(:patient) {create(:patient)}
-	let(:token) {jwt_encode({id: patient.account.id})}
+	let(:parameter) { { first_name: "abc", last_name: "xyz", age: rand(0..100), phone_number: 789654126, gender: "male", address: "abc compartment", email: "abc@email.com" } }
+
+	let!(:patient) { create(:patient) }
+	let(:token) { jwt_encode({id: patient.account.id}) }
 
   describe "GET /index" do
   	it "should display all records" do
@@ -61,7 +58,7 @@ RSpec.describe "BxBlockPatient::Patients", type: :request do
 
   describe "PATCH /update" do
   	it "should update current patient profile using token" do
-  		patch url + "/:id", headers: {"Authorization" => token}
+  		patch url + "/:id", headers: { "Authorization" => token }
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("200")
   		expect(value["data"]["attributes"]["first_name"]).to eq(patient[:first_name])

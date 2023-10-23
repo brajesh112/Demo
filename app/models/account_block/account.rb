@@ -17,5 +17,7 @@ module AccountBlock
 		has_and_belongs_to_many :specializations, class_name: "BxBlockSpecialization::Specialization"
 		has_many :prescriptions, class_name: "BxBlockPrescription::Priscription"
 		has_many :other_prescriptions, class_name: "BxBlockPrescription::Priscription", foreign_key: "patient_id"
+		has_and_belongs_to_many :other_coach_sessions, class_name: "BxBlockCoach::CoachSession",foreign_key: :coach_session_id
+		has_many :coach_sessions, class_name: "BxBlockCoach::CoachSession"
 	end
 end

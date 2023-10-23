@@ -4,13 +4,9 @@ RSpec.describe "AuthenicationBlock::Authentications", type: :request do
 	let(:url) do
 		"/authentication_block/login"
 	end
-	let(:parameter) do
-		{email: @account.email, password: @account.password}
-	end
+	let(:parameter) { { email: account.email, password: account.password } }
 
-	before do
-		@account = create(:account)
-	end
+	let(:account) { create(:account) }
 
   describe "POST /login" do
   	it "should authenticate user and generate token" do

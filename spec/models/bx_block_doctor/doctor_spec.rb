@@ -1,17 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe BxBlockDoctor::Doctor, type: :model do
-	let(:account) do
-		@account = create(:account)
-		@account.id
-	end 
-
-	let(:department) do
-		@department = create(:department)
-		@department.id
-	end
 	
-	subject {BxBlockDoctor::Doctor.create(name: "jack",practicing_from: "2008-02-20T00:00:00.000Z",professional_statement: "Graduated from AIIMS Bhopal", department_id: department, account_id: account, start_time: "10:00", end_time: "13:00")}
+	subject {create(:doctor)}
 
 	it "should be valid with valid attributes" do
 		expect(subject).to be_valid

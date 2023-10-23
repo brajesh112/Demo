@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe BxBlockPrescription::Medicine, type: :model do
- 	subject {BxBlockPrescription::Medicine.create(name: "paracetamol", description: "this medicine is use for mild fever")}
+ 	subject { create(:medicine)}
 
  	it "should be valid with valid attributes" do
  		expect(subject).to be_valid

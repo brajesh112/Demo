@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
  	namespace :bx_block_coach do
  		resources :coaches
+ 		resources :coach_sessions
  	end
 
  	namespace :bx_block_patient do

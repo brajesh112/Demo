@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe BxBlockAppointment::Slot, type: :model do
-	subject {BxBlockAppointment::Slot.create(slot_time: "11:00")}
+	subject {create(:slot)}
 
 	it "should be valild with valid attributes" do
 		expect(subject).to be_valid

@@ -2,12 +2,8 @@ require 'rails_helper'
 
 RSpec.describe BxBlockPatient::Patient, type: :model do
   # pending "add some examples to (or delete) #{__FILE__}"
-  let(:account) do
-  	@account = create(:account)
-		@account.id
-  end
 
-  subject {BxBlockPatient::Patient.create(first_name: "abc", last_name: "xyz", age: 18, phone_number: 789641236, email: "abc@email.com", gender: "male", address: "xyz compartment", account_id: account)}
+  subject { create(:patient)}
 
   it "should not be valid without first_name" do
   	subject.first_name = nil

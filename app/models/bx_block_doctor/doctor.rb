@@ -5,6 +5,7 @@ module BxBlockDoctor
 		belongs_to :department, class_name: "BxBlockDepartment::Department"
 		validates :name, :practicing_from, :professional_statement, :start_time, :end_time, presence: true
 		validate :timecheck
+		enum :status, [:active, :inactive]
 
 		def timecheck
 			if self.start_time && self.end_time

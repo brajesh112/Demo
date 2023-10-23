@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe BxBlockDepartment::Department, type: :model do
-	subject {BxBlockDepartment::Department.create(name: "new_department")}
+	subject { create(:department) }
 
 	it "should be valid with valid attributes" do
 		expect(subject).to be_valid

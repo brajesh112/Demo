@@ -2,16 +2,12 @@ require 'rails_helper'
 include JwtToken
 RSpec.describe "BxBlockDoctor::Doctors", type: :request do
 
-	let(:url) do
-		"/bx_block_doctor/doctors"
-	end
+	let(:url) { "/bx_block_doctor/doctors" }
 
-	let(:parameter) do 
-		{name: "Jack", practicing_from: "02/12/2023", professional_statement: "AIIMS Graduated", department_id: doctor.department_id, account_id: doctor.account_id,start_time: "10:00", end_time: "13:00"} 
-	end
+	let(:parameter) { { name: "Jack", practicing_from: "02/12/2023", professional_statement: "AIIMS Graduated", department_id: doctor.department_id, account_id: doctor.account_id,start_time: "10:00", end_time: "13:00" } } 
 	
-  let!(:doctor) {create(:doctor)}
-	let(:token) {jwt_encode({id: doctor.account.id}) }
+  let!(:doctor) { create(:doctor) }
+	let(:token) { jwt_encode({id: doctor.account.id}) }
 
   describe "GET /index" do
     it "should show all doctors profiles" do

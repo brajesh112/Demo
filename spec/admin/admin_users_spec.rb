@@ -2,15 +2,13 @@ require 'rails_helper'
 
 RSpec.describe Admin::AdminUsersController, type: :controller do
   render_views
+  set_admin_user
 
-  let(:parameter) do
-    {admin_user: {email: "admin@example.com", password: "123456", password_confirmation: "123456"}}
-	end
+  let(:parameter) {{ admin_user: { email: "admin@example.com", password: "123456", password_confirmation: "123456" } } }
 
-  before do
-  	@adminuser = create(:admin_user)
-    sign_in @adminuser
-  end
+  let(:permitted_params) { { id: @adminuser.id, admin_user: {email: "brajesh@gmail.com", password: "123456", password_confirmation: "123456"} } }
+
+  let(:unpermitted_params) { { id: @adminuser.id, admin_user: {email: '', password: "123456", password_confirmation: "123456" } } }
 
   describe "GET /index" do
   	it "should show all admin users" do
@@ -45,12 +43,12 @@ RSpec.describe Admin::AdminUsersController, type: :controller do
 
   describe "PUT /update" do
     it "should update admin user" do
-      put :update, params: {id: @adminuser.id, admin_user: {email: "brajesh@gmail.com", password: "123456", password_confirmation: "123456"}}
+      put :update, params: permitted_params
       expect(AdminUser.first.email).to eq("brajesh@gmail.com")
     end
 
     it "should not update admin user" do
-      put :update, params: {id: @adminuser.id, admin_user: {email: '', password: "123456", password_confirmation: "123456"}}
+      put :update, params: unpermitted_params
       expect(response.code).to eq("200")
     end
   end

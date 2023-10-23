@@ -16,13 +16,15 @@ module BxBlockAppointment
 			account = AccountBlock::Account.find_by(id: params[:account_id])
 			already = Appointment.where(slot_id: params[:slot], date: params[:date])
 			if account && !already.present?
-				appointment = account.appointments.new(patient_id: @current_account.id, slot_id: params[:slot], date: params[:date], healthcareable_type: account.role)
+				appointment = account.appointments.new(appointment_params)
+				appointment.patient_id = @current_account.id appointment.healthcareable_type = account.role
 
 				if appointment.save
 					render json: BxBlockAppointment::AppointmentSerializer.new(appointment, meta: {message: "Appointment confirmed"}).serializable_hash, status: :created
 				else
 					render json: {errors: appointment.errors.full_messages}
 				end
+				
 			else
 				render json: {error: "Slot already present"}
 			end
@@ -31,7 +33,7 @@ module BxBlockAppointment
 		def update
 			appointment = Appointment.find_by(id: params[:id])
 			if appointment
-				if appointment.update(slot_id: params[:slot], date: params[:date])
+				if appointment.update(appointment_params)
 					render json: BxBlockAppointment::AppointmentSerializer.new(appointment, meta: {message: "appointment updated"}).serializable_hash, status: :ok
 				else
 					render json: {errors: appointment.errors.full_messages}
@@ -70,6 +72,10 @@ module BxBlockAppointment
 				available_slots = slots.excluding(booked_slots)
 			end
 			render json: available_slots
+		end
+
+		def appointment_params
+			params.permit(:slot, :date, :status)
 		end
 	end
 end

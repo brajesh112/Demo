@@ -21,13 +21,12 @@ module AccountBlock
 			else
 				account = EmailAccount.new(account_params)
 			end
+
 			if account.save
 				render json: AccountBlock::AccountSerializer.new(account, meta: {message: "Account created Successfully"}).serializable_hash, status: :created
-				
 			else
 				render json: {errors: account.errors.full_messages }, status: :unprocessable_entity
 			end
-			
 		end
 
 		def update

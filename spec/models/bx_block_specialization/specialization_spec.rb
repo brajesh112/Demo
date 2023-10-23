@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe BxBlockSpecialization::Specialization, type: :model do
- 	subject {BxBlockSpecialization::Specialization.create(specialization_name: "new_specialization")}
+ 	subject {create(:specialization)}
 
 	it "should be valid with valid attributes" do
 		expect(subject).to be_valid

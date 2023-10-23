@@ -2,20 +2,13 @@ require 'rails_helper'
 
 RSpec.describe Admin::SpecializationsController, type: :controller do
   render_views
+  set_admin_user
 
-  let(:parameter) do
-  	{bx_block_specialization_specialization: {specialization_name: "new_specialization"}}
-  end
+  let(:parameter) { { bx_block_specialization_specialization: {specialization_name: "new_specialization" } } }
 
-  let(:permitted_attributes) do
-  	 {id: @specialization.id,bx_block_specialization_specialization: {specialization_name: "new_specialization"}}
-  end
+  let(:permitted_attributes) { { id: specialization.id,bx_block_specialization_specialization: { specialization_name: "new_specialization" } } }
 
-  before do
-  	@adminuser = create(:admin_user)
-    sign_in @adminuser
-    @specialization = create(:specialization)
-  end
+  let!(:specialization) { create(:specialization) }
 
   describe "GET /index" do
   	it "should render all specializations" do
@@ -25,13 +18,13 @@ RSpec.describe Admin::SpecializationsController, type: :controller do
 
   	it "assigns the specialization" do
   		get :index
-  		expect(assigns(:specializations)).to include(@specialization)
+  		expect(assigns(:specializations)).to include(specialization)
   	end
   end
 
   describe "GET /show" do
   	it "should show specialization" do
-  		get :show, params: {id: @specialization.id}
+  		get :show, params: {id: specialization.id}
   		expect(response.code).to eq("200")
   	end
   end
@@ -54,14 +47,14 @@ RSpec.describe Admin::SpecializationsController, type: :controller do
   	end
 
   	it "should not update specialization name" do
-  		put :update, params: {id: @specialization.id}
+  		put :update, params: {id: specialization.id}
   		expect(BxBlockSpecialization::Specialization.all.first.specialization_name).to_not eq("123")
   	end
   end
 
   describe "DELETE /destroy" do
   	it "should destroy specialization" do
-  		delete :destroy, params: {id: @specialization.id}
+  		delete :destroy, params: {id: specialization.id}
   		expect(BxBlockSpecialization::Specialization.count).to eq(0)
   	end
   end
