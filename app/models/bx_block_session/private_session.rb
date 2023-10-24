@@ -1,4 +1,4 @@
-module BxBlockCoach
+module BxBlockSession
 	class PrivateSession < CoachSession
 	end
 end

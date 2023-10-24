@@ -14,12 +14,12 @@ module AccountBlock
 
 		def create
 			case params[:type]
-			when "email"
-				account = EmailAccount.new(account_params)
-			when "sms"
-				account = SmsAccount.new(account_params)
-			else
-				account = EmailAccount.new(account_params)
+				when "email"
+					account = EmailAccount.new(account_params)
+				when "sms"
+					account = SmsAccount.new(account_params)
+				else
+					account = EmailAccount.new(account_params)
 			end
 
 			if account.save

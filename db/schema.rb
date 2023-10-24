@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_23_120947) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_24_112255) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -26,15 +26,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_23_120947) do
     t.integer "role"
     t.string "type"
     t.bigint "phone_number"
-  end
-
-  create_table "accounts_coach_sessions", force: :cascade do |t|
-    t.bigint "patient_id"
-    t.bigint "coach_session_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["coach_session_id"], name: "index_accounts_coach_sessions_on_coach_session_id"
-    t.index ["patient_id"], name: "index_accounts_coach_sessions_on_patient_id"
   end
 
   create_table "accounts_specializations", force: :cascade do |t|
@@ -116,9 +107,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_23_120947) do
 
   create_table "coach_sessions", force: :cascade do |t|
     t.bigint "account_id"
-    t.date "date"
-    t.text "notes"
     t.string "type"
+    t.string "start_time"
+    t.string "end_time"
+    t.string "entry_fee"
+    t.string "fees"
+    t.integer "status"
+    t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_coach_sessions_on_account_id"
@@ -168,6 +163,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_23_120947) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "patient_coach_sessions", force: :cascade do |t|
+    t.bigint "account_id"
+    t.bigint "patient_id"
+    t.bigint "coach_session_id"
+    t.date "date"
+    t.integer "payment_status"
+    t.bigint "session_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_patient_coach_sessions_on_account_id"
+    t.index ["coach_session_id"], name: "index_patient_coach_sessions_on_coach_session_id"
+    t.index ["patient_id"], name: "index_patient_coach_sessions_on_patient_id"
+    t.index ["session_id"], name: "index_patient_coach_sessions_on_session_id"
   end
 
   create_table "patient_tests", force: :cascade do |t|
@@ -250,6 +260,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_23_120947) do
     t.index ["patient_id"], name: "index_reports_on_patient_id"
   end
 
+  create_table "sessions", force: :cascade do |t|
+    t.string "session_time"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "slots", force: :cascade do |t|
     t.string "slot_time"
     t.datetime "created_at", null: false
@@ -262,11 +278,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_23_120947) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "accounts_coach_sessions", "accounts", column: "patient_id"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "appointments", "accounts"
   add_foreign_key "appointments", "accounts", column: "patient_id"
+  add_foreign_key "patient_coach_sessions", "accounts", column: "patient_id"
   add_foreign_key "patient_tests", "accounts", column: "patient_id"
   add_foreign_key "patient_triages", "accounts", column: "patient_id"
   add_foreign_key "payments", "accounts", column: "patient_id"
