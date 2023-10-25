@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :bx_block_session_session, class: 'BxBlockSession::Session' do
-    
+  factory :session, class: 'BxBlockSession::Session' do
+    session_time {"10:00"}
   end
 end

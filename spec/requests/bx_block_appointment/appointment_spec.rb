@@ -10,15 +10,15 @@ RSpec.describe "BxBlockAppointment::Appointments", type: :request do
 
 	let(:slot) { create(:slot) }
 
-	let(:parameter){ { account_id: doctor.account.id, slot: slot.id, date: "10/12/2023" } }
+	let(:parameter){ { account_id: doctor.account_id, slot_id: slot.id, date: "10/12/2023", status: "scheduled" } }
 
-	let(:unautarized) { { account_id: doctor.account.id } }
+	let(:unautarized) { { account_id: doctor.account_id } }
 
 	describe "GET /index" do
 		it "should show appointments list for current user" do
 			get url , headers: { "Authorization" => token }
 			value = JSON.parse(response.body)
-			expect(value["data"].first["attributes"]["account_id"]).to eq(doctor.account.id)
+			expect(value["data"].first["attributes"]["account_id"]).to eq(doctor.account_id)
 		end
 	end
 
@@ -27,7 +27,7 @@ RSpec.describe "BxBlockAppointment::Appointments", type: :request do
     it "should show appointment details" do
     	get url+"/#{appointment.id}", headers: {"Authorization" => token }
     	value = JSON.parse(response.body)
-   		expect(value["data"]["attributes"]["account_id"]).to eq(doctor.account.id)
+   		expect(value["data"]["attributes"]["account_id"]).to eq(doctor.account_id)
     end
   end
 
@@ -36,7 +36,7 @@ RSpec.describe "BxBlockAppointment::Appointments", type: :request do
   	it "should create appointment with doctor" do
   		post url, headers: {"Authorization" => token}, params: parameter
   		value = JSON.parse(response.body)
-  		expect(value["data"]["attributes"]["account_id"]).to eq(doctor.account.id)
+  		expect(value["data"]["attributes"]["account_id"]).to eq(doctor.account_id)
   	end
 
   	it "should show error message" do
@@ -60,7 +60,7 @@ RSpec.describe "BxBlockAppointment::Appointments", type: :request do
   	end
 
   	it "should show error message" do
-  		patch url+"/#{appointment.id}", headers: {"Authorization" => token }
+  		patch url+"/#{appointment.id}", headers: {"Authorization" => token }, params: {slot_id: ''}
   		value = JSON.parse(response.body)
   		expect(value["errors"].first).to eq("Slot must exist")
   	end
@@ -90,7 +90,7 @@ RSpec.describe "BxBlockAppointment::Appointments", type: :request do
   	it "should show list of all doctors" do
   		get "/bx_block_appointment/accounts", headers: {"Authorization" => token}
   		value = JSON.parse(response.body)
-  		expect(value["data"].first["attributes"]["id"]).to eq(doctor.account.id)
+  		expect(value["data"].first["attributes"]["id"]).to eq(doctor.account_id)
   	end
 
   	let(:specialization) {create (:specialization)}
@@ -98,14 +98,14 @@ RSpec.describe "BxBlockAppointment::Appointments", type: :request do
   		doctor.account.specializations << specialization
   		get "/bx_block_appointment/accounts", params: {query: "#{specialization.specialization_name}"}
   		value = JSON.parse(response.body)
-  		expect(value["data"].first["attributes"]["id"]).to eq(doctor.account.id)
+  		expect(value["data"].first["attributes"]["id"]).to eq(doctor.account_id)
   	end
   end
 
   describe "GET /available_slot" do
   	let!(:slot1) {create(:slot, slot_time: "11:00")}
   	it "should show available slots for specific date and doctor" do
-  		get "/bx_block_appointment/slots", params: {account_id: doctor.account.id, date: DateTime.now.to_date}
+  		get "/bx_block_appointment/slots", params: {account_id: doctor.account_id, date: DateTime.now.to_date}
   		value = JSON.parse(response.body)
   		expect(value.first["id"]).to eq(slot1.id)
   	end

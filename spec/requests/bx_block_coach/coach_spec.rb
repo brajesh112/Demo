@@ -3,7 +3,7 @@ include JwtToken
 RSpec.describe "BxBlockCoach::Coaches", type: :request do
 
   let!(:coach) {create(:coach)}
-	let(:token) {jwt_encode({id: coach.account.id})}
+	let(:token) {jwt_encode({id: coach.account_id})}
 	let(:url) { "/bx_block_coach/coaches" }
 
 	let(:parameter) { { name: "Jack", practicing_from: "02/12/2023", professional_statement: "AIIMS Graduated", account_id: coach.account_id, start_time: "10:00", end_time: "13:00" } }

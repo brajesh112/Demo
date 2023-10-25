@@ -4,7 +4,7 @@ module BxBlockAppointment
 		belongs_to :patient, class_name: "AccountBlock::Account"
 		belongs_to :account, class_name: "AccountBlock::Account"
 		belongs_to :slot, class_name: "BxBlockAppointment::Slot"
-		validates :date, presence: true
+		validates :date, :status,presence: true
 		enum :status, [:scheduled, :completed, :canceled, :rescheduled, :refunded]
 	end
 end

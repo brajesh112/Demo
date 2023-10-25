@@ -7,7 +7,7 @@ RSpec.describe "BxBlockDoctor::Doctors", type: :request do
 	let(:parameter) { { name: "Jack", practicing_from: "02/12/2023", professional_statement: "AIIMS Graduated", department_id: doctor.department_id, account_id: doctor.account_id,start_time: "10:00", end_time: "13:00" } } 
 	
   let!(:doctor) { create(:doctor) }
-	let(:token) { jwt_encode({id: doctor.account.id}) }
+	let(:token) { jwt_encode({id: doctor.account_id}) }
 
   describe "GET /index" do
     it "should show all doctors profiles" do

@@ -34,9 +34,12 @@ Rails.application.routes.draw do
 
  	namespace :bx_block_session do
  		resources :coach_sessions
- 		get "/show_coach", to: "coach_sessions#show_coach"
- 		get "/available_sessions", to: "coach_sessions#available_sessions"
+		resources :patient_coach_sessions
+ 		get "/show_coach", to: "patient_coach_sessions#show_coach"
+ 		get "/available_sessions", to: "patient_coach_sessions#available_sessions"
+ 		get "/coach_session_id", to: "patient_coach_sessions#coach_session_id"
 	end
+
  	
  	namespace :authentication_block do
  		post "/login", to: "authentications#login"

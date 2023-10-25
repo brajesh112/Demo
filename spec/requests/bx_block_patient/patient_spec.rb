@@ -7,7 +7,7 @@ RSpec.describe "BxBlockPatient::Patients", type: :request do
 	let(:parameter) { { first_name: "abc", last_name: "xyz", age: rand(0..100), phone_number: 789654126, gender: "male", address: "abc compartment", email: "abc@email.com" } }
 
 	let!(:patient) { create(:patient) }
-	let(:token) { jwt_encode({id: patient.account.id}) }
+	let(:token) { jwt_encode({id: patient.account_id}) }
 
   describe "GET /index" do
   	it "should display all records" do

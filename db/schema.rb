@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_24_112255) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_25_052144) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -110,8 +110,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_24_112255) do
     t.string "type"
     t.string "start_time"
     t.string "end_time"
-    t.string "entry_fee"
-    t.string "fees"
+    t.decimal "entery_fee"
+    t.decimal "fees"
     t.integer "status"
     t.text "notes"
     t.datetime "created_at", null: false

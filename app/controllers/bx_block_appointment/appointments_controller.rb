@@ -14,17 +14,16 @@ module BxBlockAppointment
 
 		def create
 			account = AccountBlock::Account.find_by(id: params[:account_id])
-			already = Appointment.where(slot_id: params[:slot], date: params[:date])
+			already = Appointment.where(slot: params[:slot_id], date: params[:date])
 			if account && !already.present?
 				appointment = account.appointments.new(appointment_params)
-				appointment.patient_id = @current_account.id appointment.healthcareable_type = account.role
-
+				appointment.patient_id = @current_account.id 
+				appointment.healthcareable_type = account.role
 				if appointment.save
 					render json: BxBlockAppointment::AppointmentSerializer.new(appointment, meta: {message: "Appointment confirmed"}).serializable_hash, status: :created
 				else
 					render json: {errors: appointment.errors.full_messages}
-				end
-				
+				end	
 			else
 				render json: {error: "Slot already present"}
 			end
@@ -75,7 +74,7 @@ module BxBlockAppointment
 		end
 
 		def appointment_params
-			params.permit(:slot, :date, :status)
+			params.permit(:slot_id, :date, :status)
 		end
 	end
 end
