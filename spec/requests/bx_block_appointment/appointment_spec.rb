@@ -4,9 +4,8 @@ RSpec.describe "BxBlockAppointment::Appointments", type: :request do
 
 	let(:url){ "/bx_block_appointment/appointments" }
 	let(:doctor) { create(:doctor) }
-	let(:patient) { create(:patient_account) }
-	let!(:appointment) { create(:appointment, account: doctor.account, healthcareable_type: doctor.account.role, patient: patient) }
-	let(:token){ jwt_encode({id: patient.id}) } 
+	let!(:appointment) { create(:appointment, account: doctor.account, healthcareable_type: doctor.account.role) }
+	let(:token){ jwt_encode({id: appointment.patient_id}) } 
 
 	let(:slot) { create(:slot) }
 

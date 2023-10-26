@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_25_052144) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_26_061601) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -129,6 +129,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_25_052144) do
     t.string "start_time"
     t.string "end_time"
     t.index ["account_id"], name: "index_coaches_on_account_id"
+  end
+
+  create_table "conversations", force: :cascade do |t|
+    t.string "conversation_id"
+    t.bigint "account_id"
+    t.bigint "patient_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_conversations_on_account_id"
+    t.index ["patient_id"], name: "index_conversations_on_patient_id"
   end
 
   create_table "departments", force: :cascade do |t|
@@ -282,6 +292,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_25_052144) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "appointments", "accounts"
   add_foreign_key "appointments", "accounts", column: "patient_id"
+  add_foreign_key "conversations", "accounts", column: "patient_id"
   add_foreign_key "patient_coach_sessions", "accounts", column: "patient_id"
   add_foreign_key "patient_tests", "accounts", column: "patient_id"
   add_foreign_key "patient_triages", "accounts", column: "patient_id"
