@@ -1,4 +1,7 @@
 require 'simplecov'
+require 'webmock/rspec'
+require 'cloudinary'
+# require 'cloudinary_gem'
 SimpleCov.start  'rails' do
   add_group('Admin', 'app/admin')
   # enable_coverage :admin

@@ -110,7 +110,10 @@ GEM
     cloudinary (1.27.0)
       aws_cf_signer
       rest-client (>= 2.0.0)
+    cloudinary_gem (9001.0)
     concurrent-ruby (1.2.2)
+    crack (0.4.5)
+      rexml
     crass (1.0.6)
     date (3.3.3)
     debug (1.8.0)
@@ -156,6 +159,7 @@ GEM
     has_scope (0.8.2)
       actionpack (>= 5.2)
       activesupport (>= 5.2)
+    hashdiff (1.0.1)
     http-accept (1.7.0)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
@@ -357,6 +361,10 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
+    webmock (3.19.1)
+      addressable (>= 2.8.0)
+      crack (>= 0.3.2)
+      hashdiff (>= 0.4.0, < 2.0.0)
     websocket (1.2.10)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
@@ -377,6 +385,7 @@ DEPENDENCIES
   byebug
   capybara
   cloudinary
+  cloudinary_gem
   debug
   devise
   dotenv-rails
@@ -401,6 +410,7 @@ DEPENDENCIES
   twilio-ruby
   tzinfo-data
   web-console
+  webmock
 
 RUBY VERSION
    ruby 3.1.2p20

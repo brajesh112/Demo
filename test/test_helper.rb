@@ -1,4 +1,5 @@
 require 'simplecov'
+require 'webmock/test_unit'
 SimpleCov.start 'rails'
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"

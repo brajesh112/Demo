@@ -2,9 +2,6 @@ module BxBlockConversation
 	class ConversationsController < ApplicationController
 		before_action :authenticate_request
 
-		def index
-		end
-
 		def create
 			account = AccountBlock::Account.find_by(id: params[:doc_id])
 			conversation = BxBlockConversation::Conversation.where(account_id: account.id, patient_id: @current_account.id)
