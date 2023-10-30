@@ -10,7 +10,7 @@ RSpec.describe "BxBlockSession::CoachSessions", type: :request do
   let(:parameter1) { { notes: "agvcjh", start_time: "10:00", end_time: "13:00", entery_fee: "200", fees: "400", status: "available", type: 'public'} }
 
   describe "GET /index" do
-  	it "should show all coach_sessions" do
+  	it "should show all coach_sessions of current account" do
   		get url, headers: {"Authorization" => token}
   		value = JSON.parse(response.body)
   		expect(value["data"].first["id"]).to eq("#{coach_session.id}")

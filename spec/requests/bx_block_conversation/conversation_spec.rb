@@ -17,9 +17,9 @@ RSpec.describe "BxBlockConversation::Conversations", type: :request do
     it "should call twilio apis to create conversation" do
       allow(TwilioClient).to receive(:create_conversation).and_return('your_conversation_id')
       allow(TwilioClient).to receive(:add_participant)
-      stub_request(:any, "https://api.cloudinary.com/v1_1/dknq3jgrr/image/upload").with(body: {"api_key"=>"965579635243566", "file"=>"profile20231027-15048-mv3hvq.png", "signature"=>"a12eb0f8bc65577dd2c73cba8dd733b28469139a", "timestamp"=>"1685699758"},headers: {'Accept'=>'*/*','Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3','Content-Length'=>'33017','Content-Md5'=>'BVqRl5JkZkoe4SuUU2ENgg==','Content-Type'=>'multipart/form-data;boundary=----RubyFormBoundaryGltk4HSYBEVsfZ4D','Host'=>'api.cloudinary.com','User-Agent'=>'CloudinaryRuby/1.27.0 (Ruby 3.1.2-p20)'}.to_json).to_return(status: 200, body: "Image upload Sucessfully".to_json, headers: {})
       post "/bx_block_conversation/conversations", headers: { "Authorization" => token1 }, params: {doc_id: appointment.account_id}
-      debugger
+      value = JSON.parse(response.body)
+      expect(value["data"]["attributes"]["conversation_id"]).to eq('your_conversation_id')
     end
   end
 
@@ -31,18 +31,13 @@ RSpec.describe "BxBlockConversation::Conversations", type: :request do
     	expect(value["data"].first["id"]).to eq("#{doctor.account.id}")
     end
   end
+
+  describe "POST /send_message" do
+    it "should send a message using twilio api" do
+      allow(TwilioClient).to receive(:message).and_return('hi')
+      post "/bx_block_conversation/send_message", headers: { "Authorization" => token },
+      params: {body: "hi", conversation_id: "your_conversation_id"}
+      expect(response.body).to eq("hi")
+    end
+  end
 end
-
-         # body: {"api_key"=>"965579635243566", "file"=>"profile20231027-15048-mv3hvq.png", "signature"=>"a12eb0f8bc65577dd2c73cba8dd733b28469139a", "timestamp"=>"1685699758"},headers: {
-         #  'Accept'=>'*/*',
-         #  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-         #  'Content-Length'=>'33017',
-         #  'Content-Md5'=>'BVqRl5JkZkoe4SuUU2ENgg==',
-         #  'Content-Type'=>'multipart/form-data; boundary=----RubyFormBoundaryGltk4HSYBEVsfZ4D',
-         #  'Host'=>'api.cloudinary.com',
-         #  'User-Agent'=>'CloudinaryRuby/1.27.0 (Ruby 3.1.2-p20)'
-         #   }).
-         # to_return(status: 200, body: "", headers: {})
-
-         # (filename="profile20231027-15048-mv3hvq.png")
-         # "signature a12eb0f8bc65577dd2c73cba8dd733b28469139a

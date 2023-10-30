@@ -5,6 +5,6 @@ module BxBlockPrescription
 		belongs_to :patient, class_name: "AccountBlock::Account"
 		belongs_to :account, class_name: "AccountBlock::Account"
 		validates :quantity, :duration, presence: true
-		has_many :instructions, class_name: "BxBlockPrescription::Instruction"
+		has_many :instruction_prescriptions, class_name: "BxBlockPrescription::InstructionPrescription"
 	end
 end

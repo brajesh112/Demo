@@ -26,7 +26,7 @@ module BxBlockConversation
 			rescue => error
 				render json: {error: error.message}
 			end
-			render json: message.body
+			render json: message
 		end
 
 

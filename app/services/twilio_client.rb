@@ -14,6 +14,7 @@ class TwilioClient
 
 	 	def message (c_id, user, body)
 	 		message = @@client.conversations.v1.conversations("#{c_id}").messages.create(author: "#{user}", body: "#{body}")
+	 		message.body
 	 	end
 	end
 end

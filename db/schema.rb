@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_26_061601) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_30_123743) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -162,6 +162,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_061601) do
     t.index ["department_id"], name: "index_doctors_on_department_id"
   end
 
+  create_table "instruction_prescriptions", force: :cascade do |t|
+    t.bigint "medicine_id"
+    t.bigint "instruction_id"
+    t.bigint "prescription_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["instruction_id"], name: "index_instruction_prescriptions_on_instruction_id"
+    t.index ["medicine_id"], name: "index_instruction_prescriptions_on_medicine_id"
+    t.index ["prescription_id"], name: "index_instruction_prescriptions_on_prescription_id"
+  end
+
   create_table "instructions", force: :cascade do |t|
     t.string "instruction"
     t.datetime "created_at", null: false
@@ -256,9 +267,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_061601) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "account_id"
-    t.bigint "instruction_id"
     t.index ["account_id"], name: "index_prescriptions_on_account_id"
-    t.index ["instruction_id"], name: "index_prescriptions_on_instruction_id"
     t.index ["medicine_id"], name: "index_prescriptions_on_medicine_id"
     t.index ["patient_id"], name: "index_prescriptions_on_patient_id"
   end

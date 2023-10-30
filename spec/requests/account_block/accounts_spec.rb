@@ -9,7 +9,7 @@ RSpec.describe "AccountBlock::Accounts", type: :request do
 	let(:parameter){
 		{ first_name: "Jack", last_name: "Smith",email: "jsmith#{ rand(0..111) }@sample.com", user_name: "jack_smith#{ rand(0..111) }", password: "password", role: "coach", type: "sms", gender: "male", phone_number: "789654135", profile_image: image } }
 
-	 	let!(:account) { create(:account, role: "patient") }
+	 	let!(:account) { create(:patient_account) }
 	 	let(:token) { jwt_encode({id: account.id}) }
 
   describe "GET /index" do
