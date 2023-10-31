@@ -46,6 +46,9 @@ Rails.application.routes.draw do
  		get "/coach_session_id", to: "patient_coach_sessions#coach_session_id"
 	end
 
+	namespace :bx_block_prescription do
+		resources :prescriptions
+	end
  	
  	namespace :authentication_block do
  		post "/login", to: "authentications#login"

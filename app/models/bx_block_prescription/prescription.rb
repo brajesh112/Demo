@@ -6,5 +6,6 @@ module BxBlockPrescription
 		belongs_to :account, class_name: "AccountBlock::Account"
 		validates :quantity, :duration, presence: true
 		has_many :instruction_prescriptions, class_name: "BxBlockPrescription::InstructionPrescription"
+		accepts_nested_attributes_for :instruction_prescriptions
 	end
 end
