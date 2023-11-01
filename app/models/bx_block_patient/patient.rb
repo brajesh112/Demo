@@ -3,6 +3,5 @@ module BxBlockPatient
 		self.table_name = "patients"
 		belongs_to :account, class_name: "AccountBlock::Account", optional: true
 		validates :first_name, :last_name, :gender, :phone_number, :email, :age, :address, presence: true
-		has_many :prescriptions, class_name: "BxBlockPrescription::Prescription"
 	end
 end

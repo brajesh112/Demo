@@ -9,7 +9,7 @@ RSpec.describe "AccountBlock::Accounts", type: :request do
 	let(:parameter){
 		{ first_name: "Jack", last_name: "Smith",email: "jsmith#{ rand(0..111) }@sample.com", user_name: "jack_smith#{ rand(0..111) }", password: "password", role: "coach", type: "sms", gender: "male", phone_number: "789654135", profile_image: image } }
 
-	 	let!(:account) { create(:patient_account) }
+	 	let!(:account) { create(:account, :patient) }
 	 	let(:token) { jwt_encode({id: account.id}) }
 
   describe "GET /index" do
@@ -75,7 +75,7 @@ RSpec.describe "AccountBlock::Accounts", type: :request do
   end
 
   describe "POST /specialization" do
-    let(:account1) {create(:account, role: "doctor")}
+    let(:account1) {create(:account, :doctor)}
     let(:token1) {jwt_encode({id: account1.id})}
     let!(:specialization) {create(:specialization)}
     it "should add specialization to the account" do

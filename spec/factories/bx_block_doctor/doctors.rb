@@ -6,6 +6,6 @@ FactoryBot.define do
     start_time {"10:00"}
     end_time {"13:00"}
     association :department, factory: :department
-    association :account, factory: :doctor_account
+    association :account, factory: [:account,:doctor]
   end
 end

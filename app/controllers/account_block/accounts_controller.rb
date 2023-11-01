@@ -1,6 +1,5 @@
 module AccountBlock
 	class AccountsController < ApplicationController
-		protect_from_forgery
 		skip_before_action :authenticate_request, only: [:create]
 
 		def index

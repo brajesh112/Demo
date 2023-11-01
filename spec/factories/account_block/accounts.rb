@@ -18,5 +18,17 @@ FactoryBot.define do
 	  #     content_type: 'image/png'
 	  #   })
 	  # end
+
+	  trait :patient do
+	  	role {"patient"}
+	  end
+
+	  trait :doctor do
+	  	role {"doctor"}
+	  end
+
+	  trait :coach do
+	  	role {"coach"}
+	  end
   end
 end

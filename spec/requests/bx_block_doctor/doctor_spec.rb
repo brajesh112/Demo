@@ -29,7 +29,6 @@ RSpec.describe "BxBlockDoctor::Doctors", type: :request do
 
   describe "POST /create" do
   	it "should create current account's doctors profile" do
-  		doctor.account.update(role: 'doctor')
   		post url, params: parameter, headers: {"Authorization" =>token}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("201")
@@ -37,7 +36,6 @@ RSpec.describe "BxBlockDoctor::Doctors", type: :request do
   	end
 
   	it "should Show Errors" do
-  		doctor.account.update(role: 'doctor')
   		post url, headers: {"Authorization" => token}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("422")

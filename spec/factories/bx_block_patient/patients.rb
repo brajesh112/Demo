@@ -7,6 +7,6 @@ FactoryBot.define do
     phone_number {Faker::PhoneNumber.phone_number}
     gender {Faker::Gender.binary_type}
     address {Faker::Address.full_address}
-    association :account, factory: :patient_account
+    association :account, factory: [:account,:patient]
   end
 end

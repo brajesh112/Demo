@@ -11,7 +11,7 @@ module BxBlockConversation
 					TwilioClient.add_participant(sid, @current_account, account)
 					conversation = account.conversations.create(patient_id: @current_account.id, conversation_id: sid)
 				rescue => error
-					render json: {error: error.message}
+					return render json: {error: error.message}
 				end
 			end
 			render json: BxBlockConversation::ConversationSerializer.new(conversation).serializable_hash, status: :ok
@@ -24,7 +24,7 @@ module BxBlockConversation
 			begin
 				message = TwilioClient.message(c_id, user, body)
 			rescue => error
-				render json: {error: error.message}
+				return render json: {error: error.message}
 			end
 			render json: message
 		end

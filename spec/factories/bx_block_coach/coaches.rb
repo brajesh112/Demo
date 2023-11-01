@@ -6,6 +6,6 @@ FactoryBot.define do
 		professional_statement {"Bhopal"}
 		start_time {"10:00"}
     end_time {"13:00"}
-    association :account, factory: :coach_account   
+    association :account, factory: [:account, :coach]   
   end
 end

@@ -27,7 +27,6 @@ RSpec.describe "BxBlockCoach::Coaches", type: :request do
   end
   describe "POST /create" do 
   	it "should create a new coach for current account" do
-  		coach.account.update(role: "coach")
   		post url, params: parameter,  headers: {"Authorization" => token}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("201")
@@ -35,7 +34,6 @@ RSpec.describe "BxBlockCoach::Coaches", type: :request do
   	end
 
   	it "should show error message" do
-  		coach.account.update(role: "coach")
   		post url, headers: {"Authorization" => token}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("422")

@@ -26,7 +26,7 @@ RSpec.describe "BxBlockSession::CoachSessions", type: :request do
   end
 
   describe "POST /create" do
-  	let(:account) {create(:doctor_account)}
+  	let(:account) {create(:account, :doctor)}
   	let(:token1) {jwt_encode({id: account.id})}
   	it "should create new personal coach session of current account" do
   		post url, params: parameter, headers: {"Authorization" => token}

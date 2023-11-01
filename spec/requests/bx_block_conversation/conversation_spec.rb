@@ -21,6 +21,13 @@ RSpec.describe "BxBlockConversation::Conversations", type: :request do
       value = JSON.parse(response.body)
       expect(value["data"]["attributes"]["conversation_id"]).to eq('your_conversation_id')
     end
+
+    it "should show error" do
+      allow(TwilioClient).to receive(:create_conversation).and_throw(StandardError)
+      post "/bx_block_conversation/conversations", headers: { "Authorization" => token1 }, params: {doc_id: appointment.account_id}
+      value = JSON.parse(response.body)
+      expect(value["error"]).to eq("uncaught throw StandardError")
+    end
   end
 
 
@@ -38,6 +45,14 @@ RSpec.describe "BxBlockConversation::Conversations", type: :request do
       post "/bx_block_conversation/send_message", headers: { "Authorization" => token },
       params: {body: "hi", conversation_id: "your_conversation_id"}
       expect(response.body).to eq("hi")
+    end
+
+    it "should show error" do
+      allow(TwilioClient).to receive(:message).and_throw(StandardError)
+      post "/bx_block_conversation/send_message", headers: { "Authorization" => token },
+      params: {body: "hi", conversation_id: "your_conversation_id"}
+      value = JSON.parse(response.body)
+      expect(value["error"]).to eq("uncaught throw StandardError")
     end
   end
 end

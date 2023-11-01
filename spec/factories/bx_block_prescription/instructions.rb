@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :bx_block_prescription_instruction, class: 'BxBlockPrescription::Instruction' do
-    
+  factory :instruction, class: 'BxBlockPrescription::Instruction' do
+    instruction {"medicne instruction"}
   end
 end

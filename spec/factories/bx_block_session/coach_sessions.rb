@@ -7,6 +7,6 @@ FactoryBot.define do
     fees {rand(1..100)}
     status {rand(0..1)}
     type {"BxBlockSession::PublicSession"}
-    association :account, factory: :coach_account
+    association :account, factory: [:account, :coach]
   end
 end
