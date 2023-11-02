@@ -10,7 +10,7 @@ RSpec.describe "BxBlockCoach::Coaches", type: :request do
 
   describe "GET /index" do
   	it "should show all coaches details" do
-  		get url
+      get url, headers: {"token"=> token}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("200")
   		expect(value["data"].first["attributes"]["name"]).to eq(coach.name)
@@ -19,7 +19,7 @@ RSpec.describe "BxBlockCoach::Coaches", type: :request do
 
   describe "GET /show" do
   	it "should show current account coach profile" do
-  		get url+"/:id", headers: {"Authorization" => token}
+  		get url+"/:id", headers: {"token" => token}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("200")
   		expect(value["data"]["attributes"]["name"]).to eq(coach.name)
@@ -27,14 +27,14 @@ RSpec.describe "BxBlockCoach::Coaches", type: :request do
   end
   describe "POST /create" do 
   	it "should create a new coach for current account" do
-  		post url, params: parameter,  headers: {"Authorization" => token}
+  		post url, params: parameter,  headers: {"token" => token}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("201")
   		expect(value["data"]["attributes"]["name"]).to eq(parameter[:name])
   	end
 
   	it "should show error message" do
-  		post url, headers: {"Authorization" => token}
+  		post url, headers: {"token" => token}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("422")
   		expect(value["errors"].first).to eq("Name can't be blank")
@@ -42,22 +42,22 @@ RSpec.describe "BxBlockCoach::Coaches", type: :request do
 
   	it "should show some errors message" do
   		coach.account.update(role: "doctor")
-  		post url, headers: {"Authorization" => token}
+  		post url, headers: {"token" => token}
   		value = JSON.parse(response.body)
-      expect(value["error"]).to eql("Please Select Correct Role")
+      expect(value["error"]).to eql("You are not autharized for this action")
   	end
   end
 
   describe "PATCH /update" do
   	it "should update coach profile" do
-  		patch url+"/:id", headers: {"Authorization" => token}
+  		patch url+"/:id", headers: {"token" => token}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("200")
   		expect(value["data"]["attributes"]["name"]).to eq(coach.name)
   	end
 
   	it "should through some error" do
-  		patch url+"/:id", headers:{"Authorization" => token},params:{name: nil}
+  		patch url+"/:id", headers:{"token" => token},params:{name: nil}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("422")
   		expect(value["errors"].first).to eq("Name can't be blank")

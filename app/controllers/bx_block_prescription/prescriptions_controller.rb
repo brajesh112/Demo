@@ -8,7 +8,7 @@ module BxBlockPrescription
 			if prescriptions.present?
 				render json: BxBlockPrescription::PrescriptionSerializer.new(prescriptions, meta: {message: "Index action"}).serializable_hash, status: :ok 
 			else
-				render json: {error: "The prescription you are looking for does not exists"}
+				render json: {error: "The prescription you are looking for does not exists"}, status: :not_found
 			end
 		end
 
@@ -17,7 +17,7 @@ module BxBlockPrescription
 			if prescription
 				render json: BxBlockPrescription::PrescriptionSerializer.new(prescription, meta: {message: "Show action"}).serializable_hash, status: :ok 
 			else
-				render json: {error: "The prescription you are looking for does not exists"}
+				render json: {error: "The prescription you are looking for does not exists"}, status: :not_found
 			end
 		end	
 
@@ -26,7 +26,7 @@ module BxBlockPrescription
 			if prescription.save
 				render json: BxBlockPrescription::PrescriptionSerializer.new(prescription, meta: {message: "prescription created"}).serializable_hash, status: :created
 			else
-				render json: {errors: prescription.errors.full_messages}
+				render json: {errors: prescription.errors.full_messages}, status: :unprocessable_entity
 			end
 		end
 
@@ -36,9 +36,7 @@ module BxBlockPrescription
 		end
 
 		def check_doctor
-			unless @current_account.role.eql?('doctor')
-				render json: {errors: "Your are not autharized for this action"}
-			end
+			render json: {errors: "Your are not autharized for this action"}, status: :unauthorized unless @current_account.role.eql?('doctor')
 		end
 	end
 end

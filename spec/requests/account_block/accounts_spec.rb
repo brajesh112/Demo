@@ -23,11 +23,17 @@ RSpec.describe "AccountBlock::Accounts", type: :request do
 
   describe "GET /show" do
   	it "show current account" do
-  		get url + "/:id", headers: {"Authorization"=> token}
+  		get url + "/:id", headers: {"token"=> token}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("200")
     	expect(value["data"]["attributes"]["first_name"]).to eq(account.first_name)
   	end
+
+    it "should return error" do
+      get url + "/:id", headers: {"token"=> "token"}
+      value = JSON.parse(response.body)
+      expect(value["error"]).to eq("Not enough or too many segments")
+    end
   end
 
   describe "POST /create" do
@@ -53,21 +59,21 @@ RSpec.describe "AccountBlock::Accounts", type: :request do
 
   describe "PATCH /update" do
   	it "update current account" do
-  		patch url + "/:id", headers: {"Authorization"=> token}, params: {password: account.password}
+  		patch url + "/:id", headers: {"token"=> token}, params: {password: account.password}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("200")
     	expect(value["data"]["attributes"]["first_name"]).to eq(account.first_name)
   	end
 
   	it "shows errors messages" do 
-  		patch url + "/:id", headers: {"Authorization"=> token}
+  		patch url + "/:id", headers: {"token"=> token}
   		expect(response.code).to eq("422")
   	end
   end 
 
   describe "DELETE /destroy" do
   	it "delete current account" do 
-  		delete url+ "/:id", headers: {"Authorization"=> token}
+  		delete url+ "/:id", headers: {"token"=> token}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("200")
     	expect(value["data"]["attributes"]["first_name"]).to eq(account.first_name)
@@ -79,7 +85,7 @@ RSpec.describe "AccountBlock::Accounts", type: :request do
     let(:token1) {jwt_encode({id: account1.id})}
     let!(:specialization) {create(:specialization)}
     it "should add specialization to the account" do
-      post "/account_block/specializations", headers: {"Authorization" => token1}, params: {ids: [specialization.id]}
+      post "/account_block/specializations", headers: {"token" => token1}, params: {ids: [specialization.id]}
       value = JSON.parse(response.body)
       expect(value["data"]["id"]).to eq("#{account1.id}")
     end

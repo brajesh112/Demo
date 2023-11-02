@@ -1,6 +1,7 @@
 module BxBlockDoctor
 	class DoctorsController < ApplicationController
 		before_action :authenticate_request
+		before_action :check_doctor
 
 		def index
 			doctors = Doctor.all
@@ -8,15 +9,11 @@ module BxBlockDoctor
 		end
 
 		def create
-			if @current_account.role.eql?("doctor")
-				doctor = @current_account.build_doctor(doctor_params)
-				if doctor.save
-					render json: BxBlockDoctor::DoctorSerializer.new(doctor, meta: {message: 'Profile Created'}).serializable_hash, status: :created 
-				else
-					render json:  {errors: doctor.errors.full_messages }, status: :unprocessable_entity
-				end
+			doctor = @current_account.build_doctor(doctor_params)
+			if doctor.save
+				render json: BxBlockDoctor::DoctorSerializer.new(doctor, meta: {message: 'Profile Created'}).serializable_hash, status: :created 
 			else
-				render json: {error: "Please Select Correct Role"}
+				render json:  {errors: doctor.errors.full_messages }, status: :unprocessable_entity
 			end
 		end
 
@@ -35,6 +32,10 @@ module BxBlockDoctor
 		private
 		 def doctor_params
 		 		params.permit(:name, :practicing_from, :professional_statement, :department_id, :start_time, :end_time)
+		 end
+
+		 def check_doctor
+		 		return render json: {error: "You are not authorized"}, status: :unauthorized unless @current_account.role.eql?("doctor")
 		 end
 	end
 end

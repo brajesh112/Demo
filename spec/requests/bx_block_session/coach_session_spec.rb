@@ -11,7 +11,7 @@ RSpec.describe "BxBlockSession::CoachSessions", type: :request do
 
   describe "GET /index" do
   	it "should show all coach_sessions of current account" do
-  		get url, headers: {"Authorization" => token}
+  		get url, headers: {"token" => token}
   		value = JSON.parse(response.body)
   		expect(value["data"].first["id"]).to eq("#{coach_session.id}")
   	end
@@ -19,7 +19,7 @@ RSpec.describe "BxBlockSession::CoachSessions", type: :request do
 
   describe "GET /show" do
   	it "should show specific coach session of current account" do
-  		get url+"/#{coach_session.id}", headers: {"Authorization" => token}
+  		get url+"/#{coach_session.id}", headers: {"token" => token}
   		value = JSON.parse(response.body)
   		expect(value["data"]["id"]).to eq("#{coach_session.id}")
   	end
@@ -29,19 +29,19 @@ RSpec.describe "BxBlockSession::CoachSessions", type: :request do
   	let(:account) {create(:account, :doctor)}
   	let(:token1) {jwt_encode({id: account.id})}
   	it "should create new personal coach session of current account" do
-  		post url, params: parameter, headers: {"Authorization" => token}
+  		post url, params: parameter, headers: {"token" => token}
   		value = JSON.parse(response.body)
   		expect(value["data"]["attributes"]["notes"]).to eq(parameter[:notes])
   	end
 
   	it "should create new public coach session of current account" do
-  		post url, params: parameter1, headers: {"Authorization" => token}
+  		post url, params: parameter1, headers: {"token" => token}
   		value = JSON.parse(response.body)
   		expect(value["data"]["attributes"]["notes"]).to eq(parameter[:notes])
   	end
 
   	it "should show warning you are not allowed" do
-  		post url,params: parameter1, headers: {"Authorization" => token1}
+  		post url,params: parameter1, headers: {"token" => token1}
   		value =JSON.parse(response.body)
   		expect(value["errors"]).to eq("Your are not autharized for this action")
   	end
@@ -49,7 +49,7 @@ RSpec.describe "BxBlockSession::CoachSessions", type: :request do
 
   describe "PATCH /update" do
   	it "should update coach session" do
-	  	patch url+"/#{coach_session.id}", headers: {"Authorization" => token}, params: parameter
+	  	patch url+"/#{coach_session.id}", headers: {"token" => token}, params: parameter
 	  	value = JSON.parse(response.body)
 	  	expect(value["data"]["id"]).to eq("#{coach_session.id}")
 	  end
@@ -57,7 +57,7 @@ RSpec.describe "BxBlockSession::CoachSessions", type: :request do
 
 	describe "DELETE /destroy" do
 		it "should delete coach session" do
-			delete url+"/#{coach_session.id}", headers: {"Authorization" => token}
+			delete url+"/#{coach_session.id}", headers: {"token" => token}
 			value = JSON.parse(response.body)
 		  	expect(value["data"]["id"]).to eq("#{coach_session.id}")
 	  end

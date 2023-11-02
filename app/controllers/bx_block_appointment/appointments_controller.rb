@@ -1,54 +1,40 @@
 module BxBlockAppointment 
 	class AppointmentsController < ApplicationController 
 		before_action :authenticate_request
-
+		before_action :find_appointment, only: [:show, :destroy, :update]
 		def index
-			appointments = @current_account.role.eql?("patient") ?Appointment.where(patient_id: @current_account.id) : @current_account.appointments
+			appointments = @current_account.role.eql?("patient") ? Appointment.where(patient_id: @current_account.id) : @current_account.appointments
 			render json: BxBlockAppointment::AppointmentSerializer.new(appointments, meta: {message: "Index action"}).serializable_hash, status: :ok if appointments
 		end
 
 		def show
-			appointment = Appointment.find_by(id: params[:id])
-			render json: BxBlockAppointment::AppointmentSerializer.new(appointment, meta: {message: "Show action"}).serializable_hash, status: :ok if appointment
+			render json: BxBlockAppointment::AppointmentSerializer.new(@appointment, meta: {message: "Show action"}).serializable_hash, status: :ok 
 		end
 
 		def create
 			account = AccountBlock::Account.find_by(id: params[:account_id])
 			already = Appointment.where(slot: params[:slot_id], date: params[:date])
-			if account && !already.present?
-				appointment = account.appointments.new(appointment_params)
-				appointment.patient_id = @current_account.id 
-				appointment.healthcareable_type = account.role
-				if appointment.save
-					render json: BxBlockAppointment::AppointmentSerializer.new(appointment, meta: {message: "Appointment confirmed"}).serializable_hash, status: :created
-				else
-					render json: {errors: appointment.errors.full_messages}
-				end	
+			return render json: {error: "Slot already present"}, status: :unprocessable_entity unless account && !already.present?
+			appointment = account.appointments.new(appointment_params)
+			appointment.patient_id = @current_account.id 
+			appointment.healthcareable_type = account.role
+			if appointment.save
+				render json: BxBlockAppointment::AppointmentSerializer.new(appointment, meta: {message: "Appointment confirmed"}).serializable_hash, status: :created
 			else
-				render json: {error: "Slot already present"}
-			end
+				render json: {errors: appointment.errors.full_messages}, status: :unprocessable_entity
+			end	
 		end
 
 		def update
-			appointment = Appointment.find_by(id: params[:id])
-			if appointment
-				if appointment.update(appointment_params)
-					render json: BxBlockAppointment::AppointmentSerializer.new(appointment, meta: {message: "appointment updated"}).serializable_hash, status: :ok
-				else
-					render json: {errors: appointment.errors.full_messages}
-				end
+			if @appointment.update(appointment_params)
+				render json: BxBlockAppointment::AppointmentSerializer.new(@appointment, meta: {message: "appointment updated"}).serializable_hash, status: :ok
 			else
-				render json: {error: "Select correct appointment"}
+				render json: {errors: @appointment.errors.full_messages}, status: :unprocessable_entity
 			end
 		end
 
 		def destroy
-			appointment = Appointment.find_by(id: params[:id])
-			if appointment
-				render json: BxBlockAppointment::AppointmentSerializer.new(appointment, meta: {message: "appointment canceled"}).serializable_hash, status: :ok
-			else
-				render json: {error: "something went wrong"}
-			end
+			render json: BxBlockAppointment::AppointmentSerializer.new(@appointment, meta: {message: "appointment canceled"}).serializable_hash, status: :ok
 		end
 
 
@@ -73,8 +59,14 @@ module BxBlockAppointment
 			render json: available_slots
 		end
 
-		def appointment_params
-			params.permit(:slot_id, :date, :status)
-		end
+		private 
+			def appointment_params
+				params.permit(:slot_id, :date, :status)
+			end
+
+			def find_appointment
+				@appointment = Appointment.find_by(id: params[:id])
+				return render json: {error: "Appointment does not exists"}, status: :not_found unless @appointment.present? 
+			end
 	end
 end

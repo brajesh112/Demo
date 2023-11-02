@@ -15,16 +15,15 @@ RSpec.describe "BxBlockAppointment::Appointments", type: :request do
 
 	describe "GET /index" do
 		it "should show appointments list for current user" do
-			get url , headers: { "Authorization" => token }
+			get url , headers: { "token" => token }
 			value = JSON.parse(response.body)
 			expect(value["data"].first["attributes"]["account_id"]).to eq(doctor.account_id)
 		end
 	end
 
   describe "GET /show" do
-
     it "should show appointment details" do
-    	get url+"/#{appointment.id}", headers: {"Authorization" => token }
+    	get url+"/#{appointment.id}", headers: {"token" => token }
     	value = JSON.parse(response.body)
    		expect(value["data"]["attributes"]["account_id"]).to eq(doctor.account_id)
     end
@@ -33,19 +32,19 @@ RSpec.describe "BxBlockAppointment::Appointments", type: :request do
 
   describe "POST /create" do
   	it "should create appointment with doctor" do
-  		post url, headers: {"Authorization" => token}, params: parameter
+  		post url, headers: {"token" => token}, params: parameter
   		value = JSON.parse(response.body)
   		expect(value["data"]["attributes"]["account_id"]).to eq(doctor.account_id)
   	end
 
   	it "should show error message" do
-  		post url, headers: {"Authorization" => token}, params: unautarized
+  		post url, headers: {"token" => token}, params: unautarized
   		value = JSON.parse(response.body)
   		expect(value["errors"].first).to eq("Slot must exist")
   	end
 
   	it "should suggest to select correct healthcare" do
-  		post url, headers: {"Authorization" => token}
+  		post url, headers: {"token" => token}
   		value = JSON.parse(response.body)
   		expect(value["error"]).to eq("Slot already present")
   	end
@@ -53,41 +52,41 @@ RSpec.describe "BxBlockAppointment::Appointments", type: :request do
 
   describe "PATCH /update" do
   	it "should update appointment details" do
-  		patch url+"/#{appointment.id}", headers: {"Authorization" => token }, params: {date: "12/10/2023", slot: slot.id}
+  		patch url+"/#{appointment.id}", headers: {"token" => token }, params: {date: "12/10/2023", slot: slot.id}
   		value = JSON.parse(response.body)
   		expect(value["data"]["id"]).to eq("#{appointment.id}")
   	end
 
   	it "should show error message" do
-  		patch url+"/#{appointment.id}", headers: {"Authorization" => token }, params: {slot_id: ''}
+  		patch url+"/#{appointment.id}", headers: {"token" => token }, params: {slot_id: ''}
   		value = JSON.parse(response.body)
   		expect(value["errors"].first).to eq("Slot must exist")
   	end
 
   	it "should suggest to select correct healthcare" do
-  		patch url+"/#{appointment.id + 1}", headers: {"Authorization" => token}
+  		patch url+"/#{appointment.id + 1}", headers: {"token" => token}
   		value = JSON.parse(response.body)
-  		expect(value["error"]).to eq("Select correct appointment")
+  		expect(value["error"]).to eq("Appointment does not exists")
   	end
   end
 
   describe "DELETE /destroy" do
   	it "should destroy appointment" do
-  		delete url+"/#{appointment.id}", headers: {"Authorization" => token}
+  		delete url+"/#{appointment.id}", headers: {"token" => token}
   		value = JSON.parse(response.body)
   		expect(value["data"]["id"]).to eq("#{appointment.id}")
   	end
 
   	it "should show some error" do 
-  		delete url+"/#{appointment.id + 1}", headers: {"Authorization" => token}
+  		delete url+"/#{appointment.id + 1}", headers: {"token" => token}
   		value = JSON.parse(response.body)
-  		expect(value["error"]).to eq("something went wrong")
+  		expect(value["error"]).to eq("Appointment does not exists")
   	end
   end
 
   describe "GET /account" do
   	it "should show list of all doctors" do
-  		get "/bx_block_appointment/accounts", headers: {"Authorization" => token}
+  		get "/bx_block_appointment/accounts", headers: {"token" => token}
   		value = JSON.parse(response.body)
   		expect(value["data"].first["attributes"]["id"]).to eq(doctor.account_id)
   	end

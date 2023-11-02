@@ -13,7 +13,7 @@ RSpec.describe "BxBlockPrescription::Prescriptions", type: :request do
 
   describe "GET /index" do
 	  it "should show all prescription" do
-	  	get url, headers: {"Authorization"=> token}
+	  	get url, headers: {"token"=> token}
 			value = JSON.parse(response.body)
     	expect(response.code).to eq("200")
     	expect(value["data"].first["attributes"]["quantity"]).to eq(prescription.quantity) 
@@ -21,7 +21,7 @@ RSpec.describe "BxBlockPrescription::Prescriptions", type: :request do
 
 	  it "should show error message" do
 	  	prescription.destroy
-	  	get url, headers: {"Authorization"=> token}
+	  	get url, headers: {"token"=> token}
 			value = JSON.parse(response.body)
 			expect(value["error"]).to eq("The prescription you are looking for does not exists") 
     end
@@ -29,14 +29,14 @@ RSpec.describe "BxBlockPrescription::Prescriptions", type: :request do
 
   describe "GET /show" do
   	it "should show specific prescription" do
-  		get url+"/#{prescription.id}", headers: {"Authorization"=> token}
+  		get url+"/#{prescription.id}", headers: {"token"=> token}
   		value = JSON.parse(response.body)
     	expect(response.code).to eq("200")
     	expect(value["data"]["attributes"]["quantity"]).to eq(prescription.quantity)
     end
 
     it "should show error message" do
-	  	get url+"/#{prescription.id+1}", headers: {"Authorization"=> token}
+	  	get url+"/#{prescription.id+1}", headers: {"token"=> token}
 			value = JSON.parse(response.body)
 			expect(value["error"]).to eq("The prescription you are looking for does not exists") 
     end
@@ -44,20 +44,20 @@ RSpec.describe "BxBlockPrescription::Prescriptions", type: :request do
 
   describe "POST /create" do
   	it "should create new prescription" do
-	  	post url, headers: {"Authorization"=> token}, params: parameter
+	  	post url, headers: {"token"=> token}, params: parameter
 	  	value = JSON.parse(response.body)
 	  	expect(value["data"]["attributes"]["quantity"]).to eq(prescription.quantity)
 	  end
 
 	  it "should show error message" do
-	  	post url, headers: {"Authorization"=> token}, params: unpermitted
+	  	post url, headers: {"token"=> token}, params: unpermitted
 	  	value = JSON.parse(response.body)
 	  	expect(value["errors"].first).to eq("Instruction prescriptions medicine must exist")
 	  end
 
 	  it "should return because of user not autharized" do
 	  	prescription.account.update(role: 'patient')
-	  	post url, headers: {"Authorization"=> token}, params: parameter
+	  	post url, headers: {"token"=> token}, params: parameter
 	  	value = JSON.parse(response.body)
 	  	expect(value["errors"]).to eq("Your are not autharized for this action")
 	  end

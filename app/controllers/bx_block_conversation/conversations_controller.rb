@@ -11,7 +11,7 @@ module BxBlockConversation
 					TwilioClient.add_participant(sid, @current_account, account)
 					conversation = account.conversations.create(patient_id: @current_account.id, conversation_id: sid)
 				rescue => error
-					return render json: {error: error.message}
+					return render json: {error: error.message}, status: :unprocessable_entity
 				end
 			end
 			render json: BxBlockConversation::ConversationSerializer.new(conversation).serializable_hash, status: :ok
@@ -24,15 +24,15 @@ module BxBlockConversation
 			begin
 				message = TwilioClient.message(c_id, user, body)
 			rescue => error
-				return render json: {error: error.message}
+				return render json: {error: error.message}, status: :unprocessable_entity
 			end
-			render json: message
+			render json: {message: message}, status: :ok
 		end
 
 
-		def select_doc
+		def select_doctor
 			accounts = AccountBlock::Account.joins(:appointments).where("appointments.patient_id" => @current_account.id).uniq
-			render json: AccountBlock::AccountSerializer.new(accounts, meta: {message: "select doc for conversation"}).serializable_hash, status: :ok
+			render json: AccountBlock::AccountSerializer.new(accounts, meta: {message: "select doctor for conversation"}).serializable_hash, status: :ok
 		end
 
 	end

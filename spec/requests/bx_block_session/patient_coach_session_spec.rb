@@ -15,7 +15,7 @@ RSpec.describe "BxBlockSession::PatientCoachSessions", type: :request do
 
   describe "GET /index" do
   	it "should show all coach_sessions" do
-  		get url, headers: {"Authorization" => token}
+  		get url, headers: {"token" => token}
   		value = JSON.parse(response.body)
   		expect(value["data"].first["id"]).to eq("#{patient_session.id}")
   	end
@@ -23,7 +23,7 @@ RSpec.describe "BxBlockSession::PatientCoachSessions", type: :request do
 
   describe "GET /show" do
   	it "should show specific coach session of current account" do
-  		get url+"/#{patient_session.id}", headers: {"Authorization" => token}
+  		get url+"/#{patient_session.id}", headers: {"token" => token}
   		value = JSON.parse(response.body)
   		expect(value["data"]["id"]).to eq("#{patient_session.id}")
   	end
@@ -31,7 +31,7 @@ RSpec.describe "BxBlockSession::PatientCoachSessions", type: :request do
 
   describe "POST /create" do
   	it "should create patient session of current account" do
-  		post url, params: parameter, headers: {"Authorization" => token}
+  		post url, params: parameter, headers: {"token" => token}
   		value = JSON.parse(response.body)
   		expect(value["data"]["attributes"]["notes"]).to eq(parameter[:notes])
   	end
@@ -39,7 +39,7 @@ RSpec.describe "BxBlockSession::PatientCoachSessions", type: :request do
 
  #  describe "PATCH /update" do
  #  	it "should update coach session" do
-	#   	patch url+"/#{patient_session.id}", headers: {"Authorization" => token}, params: parameter
+	#   	patch url+"/#{patient_session.id}", headers: {"token" => token}, params: parameter
 	#   	value = JSON.parse(response.body)
 	#   	expect(value["data"]["id"]).to eq("#{patient_session.id}")
 	#   end
@@ -47,7 +47,7 @@ RSpec.describe "BxBlockSession::PatientCoachSessions", type: :request do
 
 	# describe "DELETE /destroy" do
 	# 	it "should delete coach session" do
-	# 		delete url+"/#{patient_session.id}", headers: {"Authorization" => token}
+	# 		delete url+"/#{patient_session.id}", headers: {"token" => token}
 	# 		value = JSON.parse(response.body)
 	# 	  	expect(value["data"]["id"]).to eq("#{patient_session.id}")
 	#   end

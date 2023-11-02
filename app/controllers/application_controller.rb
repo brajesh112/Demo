@@ -7,9 +7,13 @@ class ApplicationController < ActionController::Base
 
 	private
 		def authenticate_request
-			header = request.headers["Authorization"]
+			header = request.headers["token"]
 			token = header.split(' ').last if header
-			decoded = jwt_decode(token) if token
-			@current_account = AccountBlock::Account.find_by(id: decoded[:id]) if decoded
+			begin
+				decoded = jwt_decode(token)
+				@current_account = AccountBlock::Account.find_by(id: decoded[:id])
+			rescue =>error
+				return render json: {error: error}, status: :unprocessable_entity
+			end
 		end
 end

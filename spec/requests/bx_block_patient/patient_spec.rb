@@ -20,7 +20,7 @@ RSpec.describe "BxBlockPatient::Patients", type: :request do
 
   describe "GET /show" do
   	it "should display profile of current patient using headers" do
-  		get url + "/:id", headers: {"Authorization" => token}
+  		get url + "/:id", headers: {"token" => token}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("200")
   		expect(value["data"]["attributes"]["first_name"]).to eq(patient.first_name)
@@ -43,7 +43,7 @@ RSpec.describe "BxBlockPatient::Patients", type: :request do
   	end
 
   	it "should create new patient using token" do
-  		post url, headers: {"Authorization" => token}, params: parameter
+  		post url, headers: {"token" => token}, params: parameter
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("201")
   		expect(value["data"]["attributes"]["first_name"]).to eq(parameter[:first_name])
@@ -58,7 +58,7 @@ RSpec.describe "BxBlockPatient::Patients", type: :request do
 
   describe "PATCH /update" do
   	it "should update current patient profile using token" do
-  		patch url + "/:id", headers: { "Authorization" => token }
+  		patch url + "/:id", headers: { "token" => token }
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("200")
   		expect(value["data"]["attributes"]["first_name"]).to eq(patient[:first_name])
@@ -81,7 +81,7 @@ RSpec.describe "BxBlockPatient::Patients", type: :request do
 
   describe "DELETE /destroy" do
     it "should destroy profile of current patient using headers" do
-      delete url + "/:id", headers: {"Authorization" => token}
+      delete url + "/:id", headers: {"token" => token}
       value = JSON.parse(response.body)
       expect(response.code).to eq("200")
       expect(value["data"]["attributes"]["first_name"]).to eq(patient.first_name)

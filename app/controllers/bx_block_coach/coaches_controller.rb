@@ -1,7 +1,7 @@
 module BxBlockCoach
 	class CoachesController < ApplicationController
 		before_action :authenticate_request
-
+		before_action :find_coach
 		def index
 			coaches = Coach.all
 			render json: BxBlockCoach::CoachSerializer.new(coaches, meta: {message: "Index Action"}).serializable_hash, status: :ok if coaches
@@ -13,15 +13,11 @@ module BxBlockCoach
 		end
 
 		def create
-			if @current_account.role.eql?("coach")
-				coach = @current_account.build_coach(coach_params)
-				if coach.save
-					render json: BxBlockCoach::CoachSerializer.new(coach, meta: {message: 'Profile Created'}).serializable_hash, status: :created 
-				else
-					render json:  {errors: coach.errors.full_messages }, status: :unprocessable_entity
-				end
+			coach = @current_account.build_coach(coach_params)
+			if coach.save
+				render json: BxBlockCoach::CoachSerializer.new(coach, meta: {message: 'Profile Created'}).serializable_hash, status: :created 
 			else
-				render json: {error: "Please Select Correct Role"}
+				render json:  {errors: coach.errors.full_messages }, status: :unprocessable_entity
 			end
 		end
 
@@ -37,6 +33,10 @@ module BxBlockCoach
 		
 			def coach_params
 				params.permit(:name, :practicing_from, :professional_statement,:start_time, :end_time)
+			end
+
+			def find_coach 
+				return render json: {error: "You are not autharized for this action"}, status: :unauthorized unless @current_account.role.eql?("coach")
 			end
 	end
 end

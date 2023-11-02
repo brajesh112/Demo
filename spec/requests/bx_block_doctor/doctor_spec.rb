@@ -11,7 +11,7 @@ RSpec.describe "BxBlockDoctor::Doctors", type: :request do
 
   describe "GET /index" do
     it "should show all doctors profiles" do
-    	get url
+    	get url, headers: {"token"=> token}
     	value = JSON.parse(response.body)
     	expect(response.code).to eq("200")
     	expect(value["data"].first["attributes"]["name"]).to eq(doctor.name)
@@ -20,7 +20,7 @@ RSpec.describe "BxBlockDoctor::Doctors", type: :request do
 
   describe "GET /show" do
   	it "should show current doctors data" do
-  		get url + "/:id", headers: {"Authorization"=> token}
+  		get url + "/:id", headers: {"token"=> token}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("200")
     	expect(value["data"]["attributes"]["name"]).to eq(doctor.name)
@@ -29,14 +29,14 @@ RSpec.describe "BxBlockDoctor::Doctors", type: :request do
 
   describe "POST /create" do
   	it "should create current account's doctors profile" do
-  		post url, params: parameter, headers: {"Authorization" =>token}
+  		post url, params: parameter, headers: {"token" =>token}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("201")
   		expect(value["data"]["attributes"]["name"]).to eq(parameter[:name])
   	end
 
   	it "should Show Errors" do
-  		post url, headers: {"Authorization" => token}
+  		post url, headers: {"token" => token}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("422")
   		expect(value["errors"].first).to eq("Department must exist")
@@ -44,22 +44,22 @@ RSpec.describe "BxBlockDoctor::Doctors", type: :request do
 
   	it "should return some error message" do 
   		doctor.account.update(role: 'coach')
-  		post url, params: parameter, headers: {"Authorization" =>token}
+  		post url, params: parameter, headers: {"token" =>token}
       value = JSON.parse(response.body)
-  		expect(value["error"]).to eql("Please Select Correct Role")
+  		expect(value["error"]).to eql("You are not authorized")
   	end
   end
 
   describe "PATCH /update" do
   	it "should update current doctors profile" do
-  		patch url+"/:id",  headers: {"Authorization" => token}
+  		patch url+"/:id",  headers: {"token" => token}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("200")
   		expect(value["data"]["attributes"]["name"]).to eq(doctor[:name])
   	end
 
   	it "should not update and show some errors" do 
-  		patch url+"/:id", headers: {"Authorization" => token}, params: {name: nil}
+  		patch url+"/:id", headers: {"token" => token}, params: {name: nil}
   		value = JSON.parse(response.body)
   		expect(response.code).to eq("422")
   		expect(value["errors"].first).to eq("Name can't be blank")

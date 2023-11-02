@@ -160,6 +160,7 @@ GEM
     formtastic (4.0.0)
       actionpack (>= 5.2.0)
     formtastic_i18n (0.7.0)
+    geocoder (1.8.2)
     globalid (1.2.1)
       activesupport (>= 6.1)
     has_scope (0.8.2)
@@ -405,6 +406,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   fast_jsonapi
+  geocoder
   importmap-rails
   jbuilder
   jwt

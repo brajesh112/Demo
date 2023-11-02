@@ -29,7 +29,7 @@ Rails.application.routes.draw do
  	namespace :bx_block_conversation do
  		resources :conversations
  		post "/send_message", to: "conversations#send_message"
- 		get "/select_doc", to: "conversations#select_doc"
+ 		get "/select_doctor", to: "conversations#select_doctor"
  	end
 
  	namespace :bx_block_appointment do
@@ -52,5 +52,9 @@ Rails.application.routes.draw do
  	
  	namespace :authentication_block do
  		post "/login", to: "authentications#login"
+ 	end
+
+ 	namespace :bx_block_payment do
+ 		post "/create_payment", to: "payments#create_payment"
  	end
 end
