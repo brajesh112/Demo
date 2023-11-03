@@ -3,11 +3,13 @@ module BxBlockCoach
 		before_action :authenticate_request
 		before_action :find_coach
 		def index
+			#comment: remove unecessary if block, remove meta
 			coaches = Coach.all
 			render json: BxBlockCoach::CoachSerializer.new(coaches, meta: {message: "Index Action"}).serializable_hash, status: :ok if coaches
 		end
 
 		def show
+			#comment: remove meta
 			coach = @current_account.coach
 			render json: BxBlockCoach::CoachSerializer.new(coach, meta: {message: "Show Action"}).serializable_hash, status: :ok 
 		end

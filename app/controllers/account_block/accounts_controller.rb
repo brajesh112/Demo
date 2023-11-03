@@ -4,11 +4,11 @@ module AccountBlock
 
 		def index
 			accounts = Account.all
-			render json: AccountBlock::AccountSerializer.new(accounts, meta: {message: "Index Action"}).serializable_hash, status: :ok if accounts
+			render json: AccountBlock::AccountSerializer.new(accounts).serializable_hash, status: :ok
 		end
 
 		def show
-			render json: AccountBlock::AccountSerializer.new(@current_account, meta: {message: "Show Action"}).serializable_hash, status: :ok if @current_account
+			render json: AccountBlock::AccountSerializer.new(@current_account).serializable_hash, status: :ok 
 		end
 
 		def create
@@ -32,7 +32,7 @@ module AccountBlock
 			unless @current_account.update(account_params)
 				render json: {errors: @current_account.errors.full_messages }, status: :unprocessable_entity
 			else
-				render json: AccountBlock::AccountSerializer.new(@current_account, meta: {message: "Updated Successfully"}).serializable_hash, status: :ok if @current_account
+				render json: AccountBlock::AccountSerializer.new(@current_account, meta: {message: "Updated Successfully"}).serializable_hash, status: :ok 
 			end
 		end
 

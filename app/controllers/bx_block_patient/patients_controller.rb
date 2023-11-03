@@ -5,11 +5,11 @@ module BxBlockPatient
 		
 		def index
 			patients = Patient.all 
-			render json: BxBlockPatient::PatientSerializer.new(patients, meta: {message: "Index Action"}).serializable_hash, status: :ok if patients
+			render json: BxBlockPatient::PatientSerializer.new(patients).serializable_hash, status: :ok 
 		end
 
 		def show	
-			render json: BxBlockPatient::PatientSerializer.new(@patient, meta: {message: "Show Action"}).serializable_hash, status: :ok 
+			render json: BxBlockPatient::PatientSerializer.new(@patient).serializable_hash, status: :ok 
 		end
 
 		def create

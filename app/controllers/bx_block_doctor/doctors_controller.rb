@@ -4,6 +4,7 @@ module BxBlockDoctor
 		before_action :check_doctor
 
 		def index
+			#comment: remove unecessary if block, remove meta
 			doctors = Doctor.all
 			render json: BxBlockDoctor::DoctorSerializer.new(doctors, meta: {message: 'index action'}).serializable_hash, status: :ok if doctors
 		end
@@ -18,6 +19,7 @@ module BxBlockDoctor
 		end
 
 		def show
+			#comment: remove meta
 			render json: BxBlockDoctor::DoctorSerializer.new(@current_account.doctor, meta: {message: 'Show Action'}).serializable_hash, status: :ok
 		end
 

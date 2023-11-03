@@ -3,6 +3,7 @@ module BxBlockConversation
 		before_action :authenticate_request
 
 		def create
+			#comment: need to remove where condition and add find_by
 			account = AccountBlock::Account.find_by(id: params[:doc_id])
 			conversation = BxBlockConversation::Conversation.where(account_id: account.id, patient_id: @current_account.id)
 			unless conversation.present?
@@ -18,6 +19,7 @@ module BxBlockConversation
 		end
 
 		def send_message
+			#comment: pass parameter directly in the method 
 			body = params[:body]
 			user = @current_account.user_name
 			c_id = params[:conversation_id]

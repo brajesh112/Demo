@@ -3,7 +3,7 @@ module BxBlockPayment
 
 		def create_payment
 			order = RazorpayPayment.create_order(params[:amount], params[:id], params[:type])
-			render json: order
+			render json: {order: order}, status: :ok
 		end
 	end
 end
