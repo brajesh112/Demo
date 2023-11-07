@@ -23,12 +23,12 @@ module BxBlockPrescription
 		end
 
 		private 
-		def prescription_params
-			params.require(:prescription).permit(:duration, :quantity, :patient_id, instruction_prescriptions_attributes: [:id, :medicine_id, :instruction_id, :_destroy])
-		end
+			def prescription_params
+				params.require(:prescription).permit(:duration, :quantity, :patient_id, instruction_prescriptions_attributes: [:id, :medicine_id, :instruction_id, :_destroy])
+			end
 
-		def check_doctor
-			render json: {errors: "Your are not autharized for this action"}, status: :unauthorized unless @current_account.role.eql?('doctor')
-		end
+			def check_doctor
+				render json: {errors: "Your are not autharized for this action"}, status: :unauthorized unless @current_account.role.eql?('doctor')
+			end
 	end
 end

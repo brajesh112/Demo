@@ -24,7 +24,7 @@ RSpec.describe "BxBlockConversation::Conversations", type: :request do
       expect(value["error"]).to eq("uncaught throw StandardError")
     end
   end
-
+  
   describe "GET /select_account" do
     it "should show list of accounts to continue conversation" do
     	get "/bx_block_conversation/select_account", headers: { "token" => token1 }

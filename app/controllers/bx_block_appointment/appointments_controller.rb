@@ -20,7 +20,7 @@ module BxBlockAppointment
 			appointment.patient_id = @current_account.id 
 			appointment.healthcareable_type = account.role
 			return render json: BxBlockAppointment::AppointmentSerializer.new(appointment, meta: {message: "Appointment confirmed"}).serializable_hash, status: :created if appointment.save
-			render json: {error: appointment.errors.full_messages}, status: :unprocessable_entity
+			render json: {errors: appointment.errors.full_messages},status: :unprocessable_entity
 		end
 
 		def update

@@ -40,7 +40,7 @@ RSpec.describe "BxBlockAppointment::Appointments", type: :request do
   	it "should show error message" do
   		post url, headers: {"token" => token}, params: unautarized
   		value = JSON.parse(response.body)
-  		expect(value["error"].first).to eq("Slot must exist")
+  		expect(value["errors"].first).to eq("Slot must exist")
   	end
 
   	it "should suggest to select correct healthcare" do
