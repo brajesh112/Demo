@@ -9,9 +9,7 @@ module BxBlockDoctor
 
 		def timecheck
 			if self.start_time && self.end_time
-			 	if self.start_time.to_time > self.end_time.to_time
-			 	 errors.add(:start_time, "can't be greater than end time")
-			 	end
+			 	errors.add(:start_time, "can't be greater than end time") if self.start_time.to_time > self.end_time.to_time
 			end
 		end
 	end

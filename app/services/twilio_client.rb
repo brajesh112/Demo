@@ -1,6 +1,7 @@
 class TwilioClient
 	class << self
 	  @@client = Twilio::REST::Client.new
+
 		def create_conversation
 			conversation = @@client.conversations.v1.conversations.create(friendly_name: 'Friendly Conversation')
 			conversation.sid
@@ -13,8 +14,11 @@ class TwilioClient
 	 	end
 
 	 	def message (c_id, user, body)
-	 		message = @@client.conversations.v1.conversations("#{c_id}").messages.create(author: "#{user}", body: "#{body}")
-	 		message.body
+	 		@@client.conversations.v1.conversations("#{c_id}").messages.create(author: "#{user}", body: "#{body}")
+	 	end
+
+	 	def continue_conversation(id)
+	 		@@client.conversations.v1.conversations("#{id}").messages.list
 	 	end
 	end
 end

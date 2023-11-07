@@ -8,7 +8,7 @@ module AccountBlock
 		end
 
 		def show
-			render json: AccountBlock::AccountSerializer.new(@current_account).serializable_hash, status: :ok 
+			render json: AccountBlock::AccountSerializer.new(@current_account).serializable_hash, status: :ok
 		end
 
 		def create
@@ -29,16 +29,13 @@ module AccountBlock
 		end
 
 		def update
-			unless @current_account.update(account_params)
-				render json: {errors: @current_account.errors.full_messages }, status: :unprocessable_entity
-			else
-				render json: AccountBlock::AccountSerializer.new(@current_account, meta: {message: "Updated Successfully"}).serializable_hash, status: :ok 
-			end
+			return render json: {errors: @current_account.errors.full_messages }, status: :unprocessable_entity unless @current_account.update(account_params)
+			render json: AccountBlock::AccountSerializer.new(@current_account, meta: {message: "Updated Successfully"}).serializable_hash, status: :ok
 		end
 
 		def destroy
 			@current_account.destroy
-			render json: AccountBlock::AccountSerializer.new(@current_account,meta: {message: "Account Deleted Successfully"}).serializable_hash,status: :ok if @current_account
+			render json: AccountBlock::AccountSerializer.new(@current_account,meta: {message: "Account Deleted Successfully"}).serializable_hash,status: :ok
 		end
 
 		def specialization

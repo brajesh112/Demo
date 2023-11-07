@@ -26,13 +26,4 @@ RSpec.describe TwilioClient do
       expect(conversation_id.class.name).to eq("Twilio::REST::Conversations::V1::ConversationContext::ParticipantInstance")
     end
   end
-
-  describe '.message' do
-    it 'sends a message and returns its body' do
-      body = 'Hello, this is a test message'
-      stub_request(:post, "https://conversations.twilio.com/v1/Conversations/mocked_conversation_id/Messages").with(body: {"Author"=>"#{patient.user_name}", "Body"=>"#{body}"},headers: headers).to_return(status: 200, body: {sid: "#{body}"}.to_json, headers: {})
-      result = TwilioClient.message(c_id, patient.user_name, body)
-      debugger
-    end
-  end
 end

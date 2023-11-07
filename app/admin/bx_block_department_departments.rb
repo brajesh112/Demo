@@ -14,10 +14,10 @@ ActiveAdmin.register BxBlockDepartment::Department, as: "Department" do
   #   permitted << :other if params[:action] == 'create' && current_user.admin?
   #   permitted
   # end
-  form do |f|
-    f.inputs do
-      f.input :name
-    end
-    f.actions
-  end
+  # form do |f|
+  #   f.inputs do
+  #     f.input :name
+  #   end
+  #   f.actions
+  # end
 end

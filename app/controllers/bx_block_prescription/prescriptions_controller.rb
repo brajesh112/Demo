@@ -5,20 +5,12 @@ module BxBlockPrescription
 
 		def index
 			prescriptions = @current_account.role.eql?("patient") ?Prescription.where(patient_id: @current_account.id) : @current_account.prescriptions
-			if prescriptions.present?
-				render json: BxBlockPrescription::PrescriptionSerializer.new(prescriptions, meta: {message: "Index action"}).serializable_hash, status: :ok 
-			else
-				render json: {error: "The prescription you are looking for does not exists"}, status: :not_found
-			end
+			render json: BxBlockPrescription::PrescriptionSerializer.new(prescriptions).serializable_hash, status: :ok
 		end
 
 		def show
 			prescription = Prescription.find_by(id: params[:id])
-			if prescription
-				render json: BxBlockPrescription::PrescriptionSerializer.new(prescription, meta: {message: "Show action"}).serializable_hash, status: :ok 
-			else
-				render json: {error: "The prescription you are looking for does not exists"}, status: :not_found
-			end
+			render json: BxBlockPrescription::PrescriptionSerializer.new(prescription).serializable_hash, status: :ok
 		end	
 
 		def create 
@@ -32,7 +24,7 @@ module BxBlockPrescription
 
 		private 
 		def prescription_params
-			params.require(:prescription).permit(:duration, :quantity, :patient_id, instruction_prescriptions_attributes: [ :medicine_id, :instruction_id])
+			params.require(:prescription).permit(:duration, :quantity, :patient_id, instruction_prescriptions_attributes: [:id, :medicine_id, :instruction_id, :_destroy])
 		end
 
 		def check_doctor

@@ -29,7 +29,8 @@ Rails.application.routes.draw do
  	namespace :bx_block_conversation do
  		resources :conversations
  		post "/send_message", to: "conversations#send_message"
- 		get "/select_doctor", to: "conversations#select_doctor"
+ 		get "/select_account", to: "conversations#select_account"
+ 		get "/select_new_account", to: "conversations#select_new_account"
  	end
 
  	namespace :bx_block_appointment do

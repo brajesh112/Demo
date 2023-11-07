@@ -47,6 +47,8 @@ gem 'arctic_admin'
 gem "active_admin_import"
 gem 'razorpay'
 gem 'geocoder'
+gem 'money'
+gem 'google_currency'
 # gem 'active_model_serializers'
 gem 'fast_jsonapi'
 gem 'rails-controller-testing'

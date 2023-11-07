@@ -3,39 +3,42 @@ module BxBlockConversation
 		before_action :authenticate_request
 
 		def create
-			#comment: need to remove where condition and add find_by
 			account = AccountBlock::Account.find_by(id: params[:doc_id])
-			conversation = BxBlockConversation::Conversation.where(account_id: account.id, patient_id: @current_account.id)
-			unless conversation.present?
-				begin
-					sid = TwilioClient.create_conversation 
-					TwilioClient.add_participant(sid, @current_account, account)
-					conversation = account.conversations.create(patient_id: @current_account.id, conversation_id: sid)
-				rescue => error
-					return render json: {error: error.message}, status: :unprocessable_entity
-				end
+			return render json: {error: "account not found"}, status: :not_found unless account
+			begin
+				sid = TwilioClient.create_conversation 
+				TwilioClient.add_participant(sid, @current_account, account)
+				conversation = account.conversations.create(patient_id: @current_account.id, conversation_id: sid)
+			rescue => error
+				return render json: {error: error.message}, status: :unprocessable_entity
 			end
 			render json: BxBlockConversation::ConversationSerializer.new(conversation).serializable_hash, status: :ok
 		end
 
 		def send_message
-			#comment: pass parameter directly in the method 
-			body = params[:body]
-			user = @current_account.user_name
-			c_id = params[:conversation_id]
 			begin
-				message = TwilioClient.message(c_id, user, body)
+				message = TwilioClient.message(params[:conversation_id], @current_account.user_name, params[:body])
 			rescue => error
 				return render json: {error: error.message}, status: :unprocessable_entity
 			end
-			render json: {message: message}, status: :ok
+			render json: { message: message.body, author: message.author }, status: :ok	
 		end
 
+		def select_account
+			accounts = AccountBlock::Account.joins(:conversations).where("conversations.patient_id" => @current_account.id).uniq
+			render json: AccountBlock::AccountSerializer.new(accounts, meta: {message: "select account to continue conversation"}).serializable_hash, status: :ok
+		end
 
-		def select_doctor
+		def select_new_account
 			accounts = AccountBlock::Account.joins(:appointments).where("appointments.patient_id" => @current_account.id).uniq
-			render json: AccountBlock::AccountSerializer.new(accounts, meta: {message: "select doctor for conversation"}).serializable_hash, status: :ok
+			render json: AccountBlock::AccountSerializer.new(accounts, meta: {message: "select account for new conversation"}).serializable_hash, status: :ok
 		end
 
+		def update 
+			account = AccountBlock::Account.find_by(id: params[:doc_id])
+			conversation = BxBlockConversation::Conversation.find_by(account_id: account.id, patient_id: @current_account.id)
+			messages = TwilioClient.continue_conversation(conversation.conversation_id) if conversation
+			render json: messages.map {|message|  {message: message.body, author: message.author}}, status: :ok	
+		end
 	end
 end

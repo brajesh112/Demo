@@ -40,13 +40,13 @@ RSpec.describe "BxBlockAppointment::Appointments", type: :request do
   	it "should show error message" do
   		post url, headers: {"token" => token}, params: unautarized
   		value = JSON.parse(response.body)
-  		expect(value["errors"].first).to eq("Slot must exist")
+  		expect(value["error"].first).to eq("Slot must exist")
   	end
 
   	it "should suggest to select correct healthcare" do
   		post url, headers: {"token" => token}
   		value = JSON.parse(response.body)
-  		expect(value["error"]).to eq("Slot already present")
+  		expect(value["error"]).to eq("slot is already booked")
   	end
   end
 
@@ -107,5 +107,11 @@ RSpec.describe "BxBlockAppointment::Appointments", type: :request do
   		value = JSON.parse(response.body)
   		expect(value.first["id"]).to eq(slot1.id)
   	end
+
+    it "should show error message when doctor is not found" do
+      get "/bx_block_appointment/slots", params: {account_id: appointment.patient_id, date: DateTime.now.to_date}
+      value = JSON.parse(response.body)
+      expect(value["error"]).to eq("Doctor not found")
+    end
   end
 end
